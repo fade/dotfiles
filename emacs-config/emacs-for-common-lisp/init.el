@@ -30,7 +30,7 @@
 ;; where we hold transient saves and other such data. The arity of
 ;; files--ensure-directory changed from emacs29 to emacs30.
 
-(if (version<= emacs-version "29.2")
+(if (version<= emacs-version "29.3")
     (progn
       (files--ensure-directory 'make-directory-internal (expand-file-name "config/" user-emacs-directory))
       (files--ensure-directory 'make-directory-internal (expand-file-name "data/" user-emacs-directory)))
@@ -169,7 +169,8 @@
 
 
 ;; start the emacs daemon process.
-(server-start)
+(if (display-graphic-p)
+    (server-start))
 
 ;;; Load the config contained in our Org-mode file, which contains the
 ;;; meat of this config..
