@@ -44,6 +44,9 @@ export NNTP='nntp.netcom.ca'
 # export http_proxy=http://127.0.0.1:3129/
 export FREEGUIDE_OPTS="-DproxySet=true -DproxyHost=http://127.0.0.1 -DproxyPort=3129"
 
+# Guix requires certain state to function 
+export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
+
 ## tech.coop vacation messenger host
 # alias vacat='ssh -l mailmon 74.115.254.23'
 
@@ -107,6 +110,8 @@ alias ec='emacsclient -c'
 alias et='emacsclient -t'
 
 ## lisp stuff
+
+alias refreeze="cd&&touch sbcl.core&&rm sbcl.core&&clear&&sbcl --eval '(freeze-sbcl)'"
 
 ## emacs setup for gnuclient because of the above aliases
 export ALTERNATE_EDITOR=emacs
