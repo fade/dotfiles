@@ -14,6 +14,13 @@ credentials.
 	user-mail-address "fade@deepsky.com")
 #+END_SRC
 
+* Pass the built-in unix password manager, emacs support
+
+#+BEGIN_SRC emacs-lisp
+  (use-package pass
+    :straight t)
+#+end_src
+
 * Which Key
 [[https://github.com/justbur/emacs-which-key][which-key]] is a useful UI panel that appears when you start pressing
 any key binding in Emacs to offer you all possible completions for the
@@ -41,7 +48,7 @@ package by Bodizar Bhatzov.
   :ensure t)
 #+END_SRC
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package no-littering
     :straight t
     :custom
@@ -189,6 +196,8 @@ remove the .elc files from the package directory:
 
 #+END_SRC
 
+#+RESULTS:
+
 ** Better Font Faces
 
 The =efs/org-font-setup= function configures various text faces to tweak
@@ -267,14 +276,14 @@ This package is useful when you have a lot of data in various org
 tables in a given document, and you want to drop it into a table that
 synthesizes various pieces of data from the other tables, with or
 without additional processing.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package orgtbl-aggregate
     :straight t
     :after org)
 #+end_src
 
 ** Org Make TOC
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package org-make-toc
     :straight t
     :after org)
@@ -321,13 +330,47 @@ file if you change this list.
   (define-key org-mode-map (kbd "C-c C-d") 'org-toggle-todo-and-fold)
 #+END_SRC
 
-** Org Web Tools
+** Org Modern. Prettify.
 #+begin_src emacs-lisp
+  (use-package org-modern
+    :straight t
+    :after org
+    :config
+    (progn 
+      (with-eval-after-load 'org (global-org-modern-mode))
+
+      (setq
+       ;; Edit settings
+       org-auto-align-tags nil
+       org-tags-column 0
+       org-catch-invisible-edits 'show-and-error
+       org-special-ctrl-a/e t
+       org-insert-heading-respect-content t
+
+       ;; Org styling, hide markup etc.
+       org-hide-emphasis-markers t
+       org-pretty-entities t
+       org-ellipsis "…"
+
+       ;; Agenda styling
+       org-agenda-tags-column 0
+       org-agenda-block-separator ?─
+       org-agenda-time-grid
+       '((daily today require-timed)
+         (800 1000 1200 1400 1600 1800 2000)))))
+#+end_src
+
+** Org Web Tools
+#+BEGIN_SRC emacs-lisp
   (use-package org-web-tools
     :straight t
     :load-path "~/SourceCode/lisp/emacs_stuff/packages-projects/org-web-tools")
 
 #+end_src
+
+** Database Support
+
+
 ** Org Roam
 #+BEGIN_SRC emacs-lisp
   (use-package emacsql
@@ -379,7 +422,7 @@ file if you change this list.
 #+END_SRC
 
 ** Org Books
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package org-books
     :straight t
     :config
@@ -543,7 +586,7 @@ good column number to do that.
 
 ** Org babel languages
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package ob-restclient
     :straight t
     :after org)
@@ -631,7 +674,7 @@ exporting to html sometimes (always?) requires htmlize
 create notes that are kept in sync when you scroll through the
 document, but that are external to it - the notes themselves live in
 an Org-mode file.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package org-noter
     :straight t)
 
@@ -641,7 +684,7 @@ an Org-mode file.
 
 * Hydra
 Hail Hydra!
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package hydra
     :straight t)
 
@@ -681,7 +724,7 @@ functionality. Including here on a provisional basis. In practice I
 have not made this a part of my workflow, yet, so I'm not going to
 generate the package clause when this file is tangled.
 
-#+begin_src emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package perspective
     :straight t
     :bind
@@ -694,7 +737,7 @@ generate the package clause when this file is tangled.
 I would like to have buffers grouped by project, so navigating the
 buffers isn't so cluttered even in the presence of vertico.
 alphapapa's bufler mode looks to solve this problem.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package bufler
     :straight t)
 #+end_src
@@ -759,7 +802,7 @@ Taken, with thanks, from [[https://github.com/dakrone/eos/blob/master/eos-web.or
 #+END_SRC
 
 * Tree-sitter
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   ;; (use-package tree-sitter
   ;;   :straight t)
 
@@ -815,7 +858,7 @@ Taken, with thanks, from [[https://github.com/dakrone/eos/blob/master/eos-web.or
 #+end_src
 * Dashboard
 Return to the subject of previous sessions fast quick.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 
   ;; Function to get a random file with specified extensions from a directory
   (defun get-random-file (directory)
@@ -850,7 +893,7 @@ Return to the subject of previous sessions fast quick.
 #+end_src
 
 * VTerm
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package vterm
     :straight t
     :config
@@ -889,7 +932,7 @@ buffers in emacs. source: [[http://whattheemacsd.com/sane-defaults.el-01.html][M
 
 * 0x0
 post regions/files/iota of emacs buffers to 0x0 for linking in remote places like IRC.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package 0x0
     :straight t)
 #+end_src
@@ -897,7 +940,7 @@ post regions/files/iota of emacs buffers to 0x0 for linking in remote places lik
 * SparQL mode
 most relevantly, sparql is used to define queries to the WikiData knowledge database. 
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package sparql-mode
     :straight t
     ;; :load-path "~/SourceCode/lisp/emacs_stuff/sparql-mode"
@@ -925,7 +968,7 @@ This really is the best PDF management system I've ever used.
 #+END_SRC
 
 * Epub support
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package nov
     :straight t
     :config
@@ -979,19 +1022,20 @@ do just that to reduce the repetition.
 Because sometimes you have to look at python code that came from a
 person with unusual editor defaults.
 #+BEGIN_SRC emacs-lisp
-(use-package whitespace
-  :bind ("s-<f10>" . whitespace-mode))
+  (use-package whitespace
+    :bind ("s-<f10>" . whitespace-mode))
 #+END_SRC
 
 * Aggressive Indent Mode
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package aggressive-indent
     :straight t
     :config
     (global-aggressive-indent-mode 1)
     ;; (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
     ;; (add-to-list 'aggressive-indent-excluded-modes 'lisp-mode)
+    (add-to-list 'aggressive-indent-excluded-modes 'sly-mrepl-mode)
     (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
 #+end_src
 
@@ -1013,7 +1057,7 @@ know if this is still true.)
 
 * Mail with mu4e
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (if run-email
       (use-package mu4e
         :straight t
@@ -1111,7 +1155,7 @@ your cursor will be briefly highlighted now.
 #+END_SRC
 
 * Vagrant
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package vagrant
     :straight t)
 
@@ -1125,7 +1169,7 @@ I'm using ollama for local LLM stuff, so lets see how that looks in
 emacs.. This package binds C-c e to a command prefix, which clobbers
 the bind we had set for visiting this config.org file.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package ellama
     :straight t
     :init
@@ -1159,7 +1203,7 @@ the bind we had set for visiting this config.org file.
 So... this is actually right up in the land of magic technology. I
 kind of can't believe how interesting it is.
 
-#+begin_src emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package gptel
     :straight t
     :config
@@ -1171,7 +1215,7 @@ kind of can't believe how interesting it is.
     :models '("codellama:latest"))
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (use-package chatgpt-arcana
     :straight (:host github :repo "CarlQLange/ChatGPT-Arcana.el" :files ("*.el"))
@@ -1208,7 +1252,7 @@ kind of can't believe how interesting it is.
     )
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package chatgpt
     :straight (:host github :repo "joshcho/ChatGPT.el" :files ("dist" "*.el"))
     :init
@@ -1219,7 +1263,7 @@ kind of can't believe how interesting it is.
 
 * Elisp packages
 ** Docker
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package docker
     :defer t
     :straight t)
@@ -1284,7 +1328,7 @@ the =tldr= is:
    This is an inescapable rabbit hole for people of a certain
    disposition.
 
-#+begin_src emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
   (use-package sdcv
     :straight t)
 #+end_src
@@ -1324,7 +1368,7 @@ some of your favorite Emacs Lisp libraries and, among other things,
 insert them into Helpful (or regular "Help") buffers when you look up
 a function
 
-#+begin_src emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; (use-package democratize
   ;;   :straight t
   ;;   :config
@@ -1379,7 +1423,7 @@ No more juggling windows after commiting. It's magit bliss.
 #+END_SRC
 
 *** magit-todo converts :TODO, :FIXME to status actions in magit.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package magit-todos
     :straight t
     :after magit
@@ -1457,7 +1501,7 @@ keep things portable.
 
 [[https://github.com/abo-abo/avy][Avy]] integrates with Ace window, and works like Ace Jump mode.
 
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package avy
     :straight t
     :config 
@@ -1495,7 +1539,7 @@ buffer navigation, but applies it to windows. The default keys are
 ** Ement
 This really is the best available client for matrix, and it's
 increasingly obvious that the young'uns won't be brought to IRC.
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
   (use-package ement
     :straight t
     :custom
@@ -1506,7 +1550,7 @@ increasingly obvious that the young'uns won't be brought to IRC.
 #+end_src
 
 ** Completion
-#+begin_src emacs-lisp 
+#+BEGIN_SRC emacs-lisp 
   ;; vertico is the base for our Helm exodus.
   (use-package vertico
     :straight t
@@ -1655,8 +1699,10 @@ increasingly obvious that the young'uns won't be brought to IRC.
     :load-path "~/SourceCode/lisp/sly"
     :straight t
     :commands sly
-    :bind ("C-c M-o" . sly-mrepl-clear-repl)
-    
+    :bind 
+    (("C-c w h". sly-hyperspec-lookup)
+     ("C-c M-o" . sly-mrepl-clear-repl))
+
     :config
     (progn
       (setf sly-lisp-implementations
@@ -1673,9 +1719,10 @@ increasingly obvious that the young'uns won't be brought to IRC.
             sly-complete-symbol*-fancy t
             sly-default-lisp 'sbcl
             common-lisp-hyperspec-root "file:///home/fade/SourceCode/lisp/HyperSpec/")
-
       (require 'sly-autoloads)
       (load "~/quicklisp/log4sly-setup.el")
+      (add-to-list 'load-path "~/SourceCode/lisp/emacs_stuff/sly-stepper")
+      (require 'sly-stepper-autoloads)
       (global-log4sly-mode 1)))
 
   (eval-after-load 'sly
@@ -1803,8 +1850,16 @@ dialect regularly.
       :defer t))
 #+END_SRC
 
+** Web Development Utilities
+
+*** Lorem Ipsum is useful in more places than just the web, but this is where it traditionally goes.
+#+BEGIN_SRC emacs-lisp
+  (use-package lorem-ipsum
+    :ensure t)
+#+end_src
+
 ** JavaScript
-  #+BEGIN_SRC elisp 
+  #+BEGIN_SRC emacs-lisp 
     (use-package js2-mode
       :ensure t
       :init
@@ -1833,7 +1888,7 @@ dialect regularly.
 
    Color /defined/ variables with [[https://github.com/ankurdave/color-identifiers-mode][color-identifiers-mode]]:
 
-  #+BEGIN_SRC elisp 
+  #+BEGIN_SRC emacs-lisp 
    (use-package color-identifiers-mode
        :ensure t
        :init
@@ -1844,7 +1899,7 @@ dialect regularly.
   to have [[http://flycheck.readthedocs.org/][flycheck]] validate the source based on [[http://www.jshint.com/][jshint]], and [[https://github.com/eslint/eslint][eslint]].
   Let’s prefer =eslint=:
 
-  #+BEGIN_SRC elisp 
+  #+BEGIN_SRC emacs-lisp 
     (add-hook 'js2-mode-hook
               (lambda () (flycheck-select-checker "javascript-eslint")))
   #+END_SRC
@@ -1876,7 +1931,7 @@ dialect regularly.
     * =sv= is =split-var-declaration=: Splits a =var= with multiple vars declared, into several =var= statements.
     * =uw= is =unwrap=: Replaces the parent statement with the selected region.
 
-  #+BEGIN_SRC elisp 
+  #+BEGIN_SRC emacs-lisp 
   (use-package js2-refactor
     :ensure t
     :init   (add-hook 'js2-mode-hook 'js2-refactor-mode)
@@ -1887,7 +1942,7 @@ dialect regularly.
     I also configure Skewer for my [[file:emacs-web.org][HTML and CSS]] files, we need to do the
     same for JavaScript:
 
-    #+BEGIN_SRC elisp 
+    #+BEGIN_SRC emacs-lisp 
   (use-package skewer-mode
      :ensure t
      :init (add-hook 'js2-mode-hook 'skewer-mode))
@@ -2113,27 +2168,27 @@ And here's how we tell Emacs which font we want. See [[https://protesilaos.com/e
 #+BEGIN_SRC emacs-lisp
   (if window-system
       (progn
-        (add-to-list 'default-frame-alist '(font . "Envy Code R"))
+        (add-to-list 'default-frame-alist '(font . "EnvyCodeR Nerd Font"))
         ;; (add-to-list 'default-frame-alist '(font . "Iosevka"))
         (set-face-attribute 'variable-pitch nil :font "Iosevka Comfy Duo" :height 120 :weight 'regular)
-        (set-face-attribute 'default nil :font "Envy Code R" :height 120)
-        (set-face-attribute 'fixed-pitch nil :font "Envy Code R-11")
+        (set-face-attribute 'default nil :font "EnvyCodeR Nerd Font" :height 120)
+        (set-face-attribute 'fixed-pitch nil :font "EnvyCodeR Nerd Font-11")
 
         (use-package fontaine
           :straight t
           :config
           (setq fontaine-presets
                 '((tiny
-                   :default-family "Envy Code R"
+                   :default-family "EnvyCodeR Nerd Font"
                    :default-height 70)
                   (small
-                   :default-family "Envy Code R"
+                   :default-family "EnvyCodeR Nerd Font"
                    :default-height 90)
                   (regular
-                   :default-family "Envy Code R"
+                   :default-family "EnvyCodeR Nerd Font"
                    :default-height 100)
                   (medium
-                   :default-family "Envy Code R"
+                   :default-family "EnvyCodeR Nerd Font"
                    :default-height 110)
                   (large
                    :default-weight semilight
@@ -2147,7 +2202,7 @@ And here's how we tell Emacs which font we want. See [[https://protesilaos.com/e
                    ;; I keep all properties for didactic purposes, but most can be
                    ;; omitted.  See the fontaine manual for the technicalities:
                    ;; <https://protesilaos.com/emacs/fontaine>.
-                   :default-family "Envy Code R"
+                   :default-family "EnvyCodeR Nerd Font"
                    :default-weight regular
                    :default-height 100
                    :fixed-pitch-family nil ; falls back to :default-family
