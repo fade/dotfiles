@@ -30,7 +30,7 @@ SAVEHIST=1000000
 
 ## EXPORTS #####################################################
 
-PATH="/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/racket/bin:$PATH"
+PATH="$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/local/racket/bin:$PATH"
 export PATH="/opt/e17/bin:$PATH"
 
 export PYTHONPATH="/opt/e17/lib/python2.7/site-packages:$PYTHONPATH"
