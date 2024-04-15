@@ -5,9 +5,11 @@ clear;
 sudo aura -Syyu
 
 # -t emacs-29
-cd; clear; ./build-emacs.sh -t master -p 20 &&
+pushd $HOME/system_scripts/ || exit 1
 
-    cd ~/SourceCode/emacs/
+clear; ./build-emacs.sh -t master -p 20 &&
+
+pushd $HOME/SourceCode/emacs/ || exit 1
 
 ./src/emacs --version &&
     git log
