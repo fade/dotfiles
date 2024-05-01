@@ -264,8 +264,8 @@ remanifest() {
 }
 
 # added by travis gem
-[ -f /home/fade/.travis/travis.sh ] && source /home/fade/.travis/travis.sh
+[ -f /home/$USER/.travis/travis.sh ] && source /home/$USER/.travis/travis.sh
 
 # opam configuration
-test -r /home/fade/.opam/opam-init/init.zsh && . /home/fade/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+test -r /home/$USER/.opam/opam-init/init.zsh && . /home/$USER/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 eval "$(direnv hook bash)"
