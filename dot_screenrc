@@ -1,0 +1,26 @@
+# ~/.screenrc
+
+# UTF-8 everywhere
+defutf8 on
+
+# no hard flow control
+defflow off
+
+# no intro
+startup_message off
+
+# don't trap ctrl-a and foil emacs
+escape ``
+
+# every screen is a login shell
+shell -$SHELL
+
+# dunno about the following:
+nethack on
+
+# restore window after flawed ncurses invokations
+altscreen on
+
+# Set the caption on the bottom line:
+# window-list <nowplaying> <mm/dd/yy> <HH:MM>am/pm
+caption always "%{= kw}%-w%{= BW}%n %t%{-}%+w %-= %1` %m/%d/%y %C:%s%a"
