@@ -25,6 +25,10 @@ HISTFILE=~/.zhistory
 HISTSIZE=1000000
 SAVEHIST=1000000
 
+# Debian Packaging environment
+DEBEMAIL="fade@deepsky.com"
+DEBFULLNAME="Brian O'Reilly"
+export DEBEMAIL DEBFULLNAME
 
 # User specific aliases and functions
 
