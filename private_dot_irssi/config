@@ -9,23 +9,6 @@ settings = {
 
 servers = (
   {
-    address = "irc.whine.com";
-    chatnet = "SRHNet";
-    port = "6667";
-    autoconnect = "yes";
-    ssl_verify = "no";
-    tls_cafile = "~/.irssi/irc.srh.org.crt";
-  },
-  {
-    address = "irc.libera.chat";
-    chatnet = "libera";
-    port = "6667";
-    use_tls = "no";
-    tls_verify = "no";
-    autoconnect = "yes";
-    starttls = "yes";
-  },
-  {
     address = "irc.libera.chat";
     chatnet = "libera";
     port = "6667";
@@ -55,6 +38,6 @@ chatnets = {
 
 channels = (
   # { name = "#trinity"; chatnet = "SRHNet"; autojoin = "yes"; },
-  # { name = "#busted"; chatnet = "WRHNet"; autojoin = "yes"; },
+  { name = "#busted"; chatnet = "WRHNet"; autojoin = "yes"; },
   { name = "#deepsky"; chatnet = "libera"; autojoin = "yes"; }
 );

@@ -38,11 +38,13 @@ your current buffer.
       (which-key-mode)
       (setq which-key-idle-delay 1))
   #+END_SRC
+
 * Sane defaults
 Sources for this section include [[https://github.com/magnars/.emacs.d/blob/master/settings/sane-defaults.el][Magnar Sveen]] and [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]].
 
 The diminish package appears to have been subsumed into the Crux
 package by Bodizar Bhatzov.
+
 #+BEGIN_SRC emacs-lisp
 (use-package diminish
   :ensure t)
@@ -57,6 +59,14 @@ package by Bodizar Bhatzov.
     (no-littering-var-directory
      (expand-file-name "data/" user-emacs-directory))
     (require 'no-littering))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package emacs
+    :init
+    ;; enable indentation+completion using the TAB key.
+    ;; 'completion-at-point is often bound to M-TAB
+    (setq tab-always-indent 'complete))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
@@ -163,6 +173,16 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
            (mapc 'find-file fn-list)))))
 #+END_SRC
 
+* Personal keymaps
+#+begin_src emacs-lisp
+  ;; Global Prefix for personal binds
+  ;; this system is largely derivative of SummerEmacs' setup
+
+  (defvar-keymap prefix-buffer-map=0
+    :doc "Prefix map for C-Q for 0x0"
+    "f" #'0x0-upload-file
+    "t" #'0x0-upload-text)
+#+end_src
 * Org mode
 
 Org mode is one of the killer applications that run inside Emacs. It
@@ -365,11 +385,7 @@ file if you change this list.
   (use-package org-web-tools
     :straight t
     :load-path "~/SourceCode/lisp/emacs_stuff/packages-projects/org-web-tools")
-
 #+end_src
-
-** Database Support
-
 
 ** Org Roam
 #+BEGIN_SRC emacs-lisp
@@ -844,8 +860,8 @@ Taken, with thanks, from [[https://github.com/dakrone/eos/blob/master/eos-web.or
        ("https://github.com/tree-sitter/tree-sitter-cpp"
         ("tree-sitter-cpp"))
 
-       ;; ("https://github.com/tree-sitter/tree-sitter-c"
-       ;;  (tree-sitter-c))
+       ("https://github.com/tree-sitter/tree-sitter-c"
+        (tree-sitter-c))
        ))
 
     :config
@@ -1003,19 +1019,20 @@ window as well, so might as well rebind the splitting key bindings to
 do just that to reduce the repetition.
 
 #+BEGIN_SRC emacs-lisp
-(defun vsplit-other-window ()
-  "Splits the window vertically and switches to that window."
-  (interactive)
-  (split-window-vertically)
-  (other-window 1 nil))
-(defun hsplit-other-window ()
-  "Splits the window horizontally and switches to that window."
-  (interactive)
-  (split-window-horizontally)
-  (other-window 1 nil))
+  (defun vsplit-other-window ()
+    "Splits the window vertically and switches to that window."
+    (interactive)
+    (split-window-vertically)
+    (other-window 1 nil))
 
-(bind-key "C-x 2" 'vsplit-other-window)
-(bind-key "C-x 3" 'hsplit-other-window)
+  (defun hsplit-other-window ()
+    "Splits the window horizontally and switches to that window."
+    (interactive)
+    (split-window-horizontally)
+    (other-window 1 nil))
+
+  (bind-key "C-x 2" 'vsplit-other-window)
+  (bind-key "C-x 3" 'hsplit-other-window)
 #+END_SRC
 
 * Whitespace mode
@@ -1203,16 +1220,21 @@ the bind we had set for visiting this config.org file.
 So... this is actually right up in the land of magic technology. I
 kind of can't believe how interesting it is.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp 
   (use-package gptel
     :straight t
     :config
-    (setf  gptel-default-mode 'org-mode))
+    (setq  gptel-default-mode 'org-mode
+           gptel-model "codellama:latest"
+           gptel-backend (gptel-make-ollama "Ollama"
+                           :host "localhost:11434"
+                           :stream t
+                           :models '("codellama:latest" "zephyr:latest" "dolphin-mixtral:latest"))))
 
   (gptel-make-ollama "Ollama"
     :host "localhost:11434"
     :stream t
-    :models '("codellama:latest"))
+    :models '("codellama:latest" "zephyr:latest" "dolphin-mixtral:latest"))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -1361,21 +1383,12 @@ emacs more fruitful.
     (global-set-key (kbd "C-h C") #'helpful-command))
 #+END_SRC
 
-** Democratize
-
-Democratize can extract thousands of usage examples (aka "demos") from
-some of your favorite Emacs Lisp libraries and, among other things,
-insert them into Helpful (or regular "Help") buffers when you look up
-a function
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  ;; (use-package democratize
-  ;;   :straight t
-  ;;   :config
-  ;;   (democratize-enable-examples-in-helpful)
-  ;;   (democratize-enable-examples-in-help))
+** TLDR
+Documentational precis of various help sources
+#+begin_src emacs-lisp
+  (use-package tldr
+    :straight t)
 #+end_src
-
 ** Magit
 
 A great interface for git projects. It's much more pleasant to use
@@ -1444,7 +1457,8 @@ We'll also need to =(require 'multiple-cusors)= because of [[https://github.com/
            ("C-!"         . mc/mark-next-symbol-like-this)
            ("s-d"         . mc/mark-all-dwim)))
 #+END_SRC
-** Perspective
+
+* Perspective
 
 Workspaces in Emacs.
 
@@ -1454,7 +1468,7 @@ Workspaces in Emacs.
   :defer t
   :config (persp-mode))
 #+END_SRC
-** Projectile
+* Projectile
 [[http://batsov.com/projectile/][Projectile Home]]
 
 Project navigation and management library for Emacs.
@@ -1471,7 +1485,7 @@ Project navigation and management library for Emacs.
   (setq projectile-switch-project-action 'projectile-dired))
 #+END_SRC
 
-** Restclient
+* Restclient
 
 See [[http://emacsrocks.com/e15.html][Emacs Rocks! Episode 15]] to learn how restclient can help out with
 testing APIs from within Emacs. The HTTP calls you make in the buffer
@@ -1486,7 +1500,7 @@ keep things portable.
     :mode ("\\.restclient\\'" . restclient-mode))
 #+END_SRC
 
-** Undo Tree
+* Undo Tree
 #+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :straight t
@@ -1497,7 +1511,7 @@ keep things portable.
     (undo-tree-auto-save-history nil))
 #+END_SRC
 
-** Avy - a better Ace
+* Avy - a better Ace
 
 [[https://github.com/abo-abo/avy][Avy]] integrates with Ace window, and works like Ace Jump mode.
 
@@ -1511,7 +1525,7 @@ keep things portable.
     (set-face-attribute 'avy-lead-face-1 nil :background "SlateBlue4" :foreground "light goldenrod")
     :bind ("s-s c" . avy-goto-char))
 #+end_src
-** Ace Window
+* Ace Window
 
 [[https://github.com/abo-abo/ace-window][ace-window]] is a package that uses the same idea from ace-jump-mode for
 buffer navigation, but applies it to windows. The default keys are
@@ -1524,7 +1538,7 @@ buffer navigation, but applies it to windows. The default keys are
     (ace-window-display-mode)
     :bind ("s-o" . ace-window))
 #+END_SRC
-** Ag -- The Silver Searcher.
+* Ag -- The Silver Searcher.
 
 #+BEGIN_SRC emacs-lisp
 (use-package ag
@@ -1536,7 +1550,7 @@ buffer navigation, but applies it to windows. The default keys are
         ag-reuse-buffers t))
 #+END_SRC
 
-** Ement
+* Ement
 This really is the best available client for matrix, and it's
 increasingly obvious that the young'uns won't be brought to IRC.
 #+BEGIN_SRC emacs-lisp
@@ -1549,7 +1563,7 @@ increasingly obvious that the young'uns won't be brought to IRC.
     (ement-set-display-name "Fade"))
 #+end_src
 
-** Completion
+* Completion
 #+BEGIN_SRC emacs-lisp 
   ;; vertico is the base for our Helm exodus.
   (use-package vertico
@@ -1643,51 +1657,24 @@ increasingly obvious that the young'uns won't be brought to IRC.
 
 #+end_src
 
-*** Company
-#+BEGIN_SRC emacs-lisp
-  (use-package company
-    :ensure nil
-    :diminish company-mode
-    ;; :bind (:map company-mode-map
-    ;;             (("C-n" . company-select-next)
-    ;;              ("C-p" . company-select-previous)
-    ;;              ("C-d" . company-show-doc-buffer)
-    ;;              ("M-." . company-show-location)))
-    :config
-    (progn
-      ;; less than this and it disrupts typing when you aren't interested in completion.
-      (setq company-idle-delay 0.9)
-      (setq company-minimize-prefix-length 3)
-      ;; company completion everywhere.
-      (add-hook 'after-init-hook 'global-company-mode)
-      (require 'color)
-
-      (let ((bg (face-attribute 'default :background)))
-        (custom-set-faces
-         `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
-         `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-         `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-         `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-         `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-
-      (with-eval-after-load 'company
-        (define-key company-active-map (kbd "M-n") nil)
-        (define-key company-active-map (kbd "M-p") nil)
-        (define-key company-active-map (kbd "C-n") #'company-select-next)
-        (define-key company-active-map (kbd "C-p") #'company-select-previous)
-        (define-key company-active-map (kbd "SPC") #'company-abort))))
-
-  ;; (use-package company-box
-  ;;   :after company)
-
-  (use-package company-quickhelp
-    :after (company)
-    :hook (company-mode . company-quickhelp-mode)
-    :config
-    (setq company-quickhelp-delay 1.0)
-    :ensure t)
-
-#+END_SRC
+* Corfu
+Looking at this as a replacement for Company.
+#+begin_src emacs-lisp
+  (use-package corfu
+    :straight t
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t)
+    (corfu-scroll-margin 5)
+    (corfu-separator ?\s)
+    :bind (:map corfu-map
+                (("C-n" . corfu-next)
+                 ("C-p" . corfu-previous)
+                 ("<tab>" . corfu-next)
+                 ("<backtab>" . corfu-previous)))
+    :init
+    (global-corfu-mode))
+#+end_src
 
 * Languages
 ** Common Lisp
@@ -2117,15 +2104,15 @@ the load average.
 (setq display-time-default-load-average nil)
 #+END_SRC
 ** Swap Buffer Windows
-   #+BEGIN_SRC emacs-lisp
-     (use-package buffer-move
-       :ensure t
-       :config
-       (progn
-	 (global-set-key (kbd "<C-M-s-up>")     'buf-move-up)
-	 (global-set-key (kbd "<C-M-s-down>")   'buf-move-down)
-	 (global-set-key (kbd "<C-M-s-left>")   'buf-move-left)
-	 (global-set-key (kbd "<C-M-s-right>")  'buf-move-right)))
+#+BEGIN_SRC emacs-lisp
+  (use-package buffer-move
+    :ensure t
+    :config
+    (progn
+      (global-set-key (kbd "<C-M-s-up>")     'buf-move-up)
+      (global-set-key (kbd "<C-M-s-down>")   'buf-move-down)
+      (global-set-key (kbd "<C-M-s-left>")   'buf-move-left)
+      (global-set-key (kbd "<C-M-s-right>")  'buf-move-right)))
    #+END_SRC
 
 ** Display Battery Mode
