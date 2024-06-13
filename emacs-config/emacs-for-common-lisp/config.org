@@ -368,7 +368,7 @@ file if you change this list.
        org-insert-heading-respect-content t
 
        ;; Org styling, hide markup etc.
-       org-hide-emphasis-markers t
+       org-hide-emphasis-markers nil
        org-pretty-entities t
        org-ellipsis "…"
 
@@ -379,7 +379,6 @@ file if you change this list.
        '((daily today require-timed)
          (800 1000 1200 1400 1600 1800 2000)))))
 #+end_src
-
 ** Org Web Tools
 #+BEGIN_SRC emacs-lisp
   (use-package org-web-tools
@@ -449,9 +448,9 @@ file if you change this list.
 Set up some global key bindings that integrate with Org Mode features.
 
 #+BEGIN_SRC emacs-lisp
-(bind-key "C-c l" 'org-store-link)
-(bind-key "C-c c" 'org-capture)
-(bind-key "C-c a" 'org-agenda)
+  (bind-key "C-c l" 'org-store-link)
+  (bind-key "C-c c" 'org-capture)
+  (bind-key "C-c a" 'org-agenda)
 #+END_SRC
 
 ** Center Org Buffers
@@ -1180,61 +1179,39 @@ your cursor will be briefly highlighted now.
     :straight t)
 #+end_src
 
-* Llama2
-
-I'm using ollama for local LLM stuff, so lets see how that looks in
-emacs.. This package binds C-c e to a command prefix, which clobbers
-the bind we had set for visiting this config.org file.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package ellama
-    :straight t
-    :init
-    (setopt ellama-keymap-prefix "C-c t")
-    (setopt ellama-language "English")
-    (require 'llm-ollama)
-    ;; (setopt ellama-provider
-    ;;         (make-llm-ollama
-    ;;          :chat-model "codellama:latest" :embedding-model "codellama:latest"))
-    (setopt ellama-providers
-            '(("codellama" . (make-llm-llama
-                              :chat-model "codellama:latest" :embedding-model "codellama:latest"))
-              ("zephyr" . (make-llm-ollama
-                           :chat-model "zephyr:latest" :embedding-model "zephyr:latest"))
-
-              ("mistral" . (make-llm-ollama
-                            :chat-model "mistral:latest" :embedding-model "mistral:latest"))
-
-              ("dolphin-mixtral" . (make-llm-ollama
-                                    :chat-model "dolphin-mixtral:latest"
-                                    :embedding-model "dolphin-mixtral:latest"))))
-    (setopt ellama-naming-provider
-            (make-llm-ollama
-             :chat-model "zephyr:latest"
-             :embedding-model "zephyr:latest"))
-    (setopt ellama-naming-scheme 'ellama-generate-name-by-llm))
-#+end_src
-
-* OpenAI ChatGPT
+* LLM Integrations via Ollama
 
 So... this is actually right up in the land of magic technology. I
 kind of can't believe how interesting it is.
+
+This is the Emacs configuration for the =gptel= package, which allows you to use a language model as a helpful assistant in Emacs. The following settings are used:
+
+- =gptel-default-mode=: This sets the default mode for =gptel= to be =org-mode=.
+- =gptel-model=: This sets the name of the language model that will be used by =gptel=, which in this case is "codellama:latest".
+- =gptel-directives=: This sets a list of directives for =gptel= to use when generating responses. In this case, the first directive sets the default response for any input, while the second directive sets the response for inputs that are labeled as "programming".
+- =C-c t=: This sets the key binding for sending input to =gptel=.
+- =gptel-mode-map=: This sets the map of key bindings for =gptel= mode. The first binding sets the key binding for displaying the menu, while the second binding sets the key binding for sending input to =gptel=.
+
+Overall, this configuration sets up =gptel= to use a language model called "codellama:latest" and provides some default directives for generating responses.
 
 #+BEGIN_SRC emacs-lisp 
   (use-package gptel
     :straight t
     :config
-    (setq  gptel-default-mode 'org-mode
+    (setf  gptel-default-mode 'org-mode
            gptel-model "codellama:latest"
-           gptel-backend (gptel-make-ollama "Ollama"
-                           :host "localhost:11434"
-                           :stream t
-                           :models '("codellama:latest" "zephyr:latest" "dolphin-mixtral:latest"))))
+           
+           gptel-directives '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely.")
+                              (programming . "You are a large language model and a careful programmer and insightful system architect. Provide code and explanation as appropriate.")))
+    :bind (("C-c t" . 'gptel-send)
+           :map gptel-mode-map
+           ("C-c h" . 'gptel-menu)))
 
-  (gptel-make-ollama "Ollama"
-    :host "localhost:11434"
-    :stream t
-    :models '("codellama:latest" "zephyr:latest" "dolphin-mixtral:latest"))
+  (setq gptel-backend (gptel-make-ollama "Ollama"
+                        :host "localhost:11434"
+                        :stream t
+                        :models '("codellama:latest" "zephyr:latest" "dolphin-mixtral:latest")))
+
 #+end_src
 
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -2157,7 +2134,6 @@ And here's how we tell Emacs which font we want. See [[https://protesilaos.com/e
   (if window-system
       (progn
         (add-to-list 'default-frame-alist '(font . "EnvyCodeR Nerd Font"))
-        ;; (add-to-list 'default-frame-alist '(font . "Iosevka"))
         (set-face-attribute 'variable-pitch nil :font "Iosevka Comfy Duo" :height 120 :weight 'regular)
         (set-face-attribute 'default nil :font "EnvyCodeR Nerd Font" :height 120)
         (set-face-attribute 'fixed-pitch nil :font "EnvyCodeR Nerd Font-11")
