@@ -76,22 +76,22 @@ _myhosts=( ${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*} )
 zstyle ':completion:*' hosts $_myhosts
 
 
-# # Here's an annoying thing.  if xemacs' TMPDIR doesn't match gnuclient's
-# # TMPDIR, gnuclient is unable to connect with xemacs. perhaps because it
-# # relies on a file in $TMPDIR for ipc.
-# # export TMPDIR=/usr/tmp
+# Here's an annoying thing.  if xemacs' TMPDIR doesn't match gnuclient's
+# TMPDIR, gnuclient is unable to connect with xemacs. perhaps because it
+# relies on a file in $TMPDIR for ipc.
+# export TMPDIR=/usr/tmp
 
-# # tramp does not like fancy prompts
+# tramp does not like fancy prompts
 
-# if [ "$TERM" = "dumb" ]
-# then
-#     unsetopt zle
-#     unsetopt prompt_cr
-#     unsetopt prompt_subst
-# #    unfunction precmd
-# #    unfunction preexec
-#     PS1='$ '
-# fi
+if [ "$TERM" = "dumb" ]
+then
+    unsetopt zle
+    unsetopt prompt_cr
+    unsetopt prompt_subst
+    #    unfunction precmd
+    #    unfunction preexec
+    PS1='$ '
+fi
 
 
 export PROMPT=$'[%n]%B%M%b\:%~\n[%D{%a %b %d} <%*>]\\\>'
