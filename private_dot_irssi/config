@@ -9,8 +9,25 @@ settings = {
 
 servers = (
   {
+    address = "colonq.computer";
+    chatnet = "Clonquistes";
+    port = "26697";
+    use_tls = "yes";
+    autoconnect = "yes";
+    starttls = "yes";
+  },
+  {
     address = "irc.libera.chat";
     chatnet = "libera";
+    port = "6667";
+    use_tls = "no";
+    tls_verify = "no";
+    autoconnect = "yes";
+    starttls = "yes";
+  },
+  {
+    address = "irc.whine.com";
+    chatnet = "SRHNet";
     port = "6667";
     use_tls = "no";
     tls_verify = "no";
@@ -34,10 +51,18 @@ chatnets = {
     max_msgs = "15";
     max_whois = "4";
   };
+  Clonquistes = {
+    type = "IRC";
+    max_kicks = "5";
+    max_modes = "5";
+    max_msgs = "15";
+    max_whois = "4";
+  };
 };
 
 channels = (
-  # { name = "#trinity"; chatnet = "SRHNet"; autojoin = "yes"; },
-  { name = "#busted"; chatnet = "WRHNet"; autojoin = "yes"; },
-  { name = "#deepsky"; chatnet = "libera"; autojoin = "yes"; }
+  { name = "#trinity"; chatnet = "SRHNet"; autojoin = "yes"; },
+  # { name = "#cyberspace"; chatnet = "Clonquistes"; autojoin = "yes"; },
+  { name = "#busted"; chatnet = "SRHNet"; autojoin = "yes"; },
+  # { name = "#deepsky"; chatnet = "libera"; autojoin = "yes"; }
 );
