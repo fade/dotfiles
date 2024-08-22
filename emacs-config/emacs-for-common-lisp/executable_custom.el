@@ -237,8 +237,16 @@
    ["#282a36" "#ff5555" "#50fa7b" "#f1fa8c" "#61bfff" "#ff79c6" "#8be9fd"
     "#f8f8f2"])
  '(safe-local-variable-values
-   '((Package . SGML) (Package . CL-USER)
-     (org-edit-src-content-indentation 0)
+   '((c-file-offsets (innamespace . 0) (substatement-open . 0)
+                     (c . c-lineup-dont-change) (inextern-lang . 0)
+                     (comment-intro . c-lineup-dont-change)
+                     (arglist-cont-nonempty . c-lineup-arglist)
+                     (block-close . 0) (statement-case-intro . ++)
+                     (brace-list-intro . ++) (cpp-define-intro . +))
+     (c-auto-align-backslashes)
+     (whitespace-style quote (face trailing empty tabs))
+     (whitespace-action) (Package . CCL) (Package . SGML)
+     (Package . CL-USER) (org-edit-src-content-indentation 0)
      (Package . TRIVIAL-GRAY-STREAMS) (Syntax . ANSI-Common-lisp)
      (eval cl-flet
            ((enhance-imenu-lisp (&rest keywords)
@@ -358,6 +366,8 @@
  '(company-tooltip-scrollbar-thumb ((t (:background "#0ccc0ccc0ccc"))))
  '(company-tooltip-scrollbar-track ((t (:background "#199919991999"))))
  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+ '(erc-input-face ((t (:foreground "spring green"))))
+ '(erc-my-nick-face ((t (:foreground "magenta" :weight bold))))
  '(font-lock-constant-face ((t (:foreground "#00ff7f"))))
  '(font-lock-string-face ((t (:foreground "cornsilk3"))))
  '(helm-bookmark-directory ((t (:inherit helm-ff-directory))))

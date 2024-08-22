@@ -1,6 +1,7 @@
 ;; -*-lisp-*-
 
 ;; quicklisp setup
+
 (load "~/quicklisp/setup.lisp")
 (use-package :ql)
 
@@ -21,6 +22,7 @@
 
 (sb-ext:restrict-compiler-policy 'speed 3)
 (sb-ext:restrict-compiler-policy 'debug 2)
+
 ;; (sb-ext:restrict-compiler-policy 'safety 3)
 ;; (sb-ext:restrict-compiler-policy 'safety)
 
@@ -130,24 +132,24 @@
 ;; generate an SBCL image file preloaded with the systems that I pretty much always use.
 
 (defun freeze-sbcl ()
-  (dolist (system '("asdf"
-                    "uiop"
-                    "iolib"
-                    "named-readtables"
-                    "alexandria"
+  (dolist (system '("alexandria"
                     "babel"
                     "bordeaux-threads"
                     "cffi"
-                    "rutils"
-                    "closer-mop"
                     "cl-ppcre"
-                    "hunchentoot"
-                    "dexador"
                     "cl-strings"
+                    "closer-mop"
+                    "dexador"
+                    "hunchentoot"
+                    "iolib"
                     "local-time"
+                    "named-readtables"
                     "net-telent-date"
+                    "quickapp"
+                    "rutils"
                     "slynk"
-                    ))
+                    "uiop"
+                    "asdf"))
     (ql:quickload system))
   #+sbcl
   (sb-ext:save-lisp-and-die "sbcl.core" :compression 22))
@@ -156,7 +158,7 @@
   "Calculate the area of a triangle whose sides are of known length.
 In geometry, Heron's formula (or Hero's formula) gives the area of a
 triangle in terms of the three side lengths a, b, c. If s = 1/2 (a + b + c)
-is the  is the semiperimeter of the triangle, the area A is,
+is the semiperimeter of the triangle, the area A is,
     A = s ( s − a ) ( s − b ) ( s − c ) . A={\sqrt {s(s-a)(s-b)(s-c)}}."
 
   (let ((s (/ (+ a b d) 2)))

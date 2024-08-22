@@ -827,6 +827,15 @@ exporter for PDF exporting. By changing the command to `latexmk`
 references appear in the PDF output like they should. Source:
 http://tex.stackexchange.com/a/161619.
 
+#+begin_src emacs-lisp
+  (use-package auctex-cont-latexmk
+    :straight t)
+
+  (use-package latex-extra
+    :straight t
+    :hook 'LaTeX-mode-hook #'latex-extra-mode)
+#+end_src
+
 #+BEGIN_SRC emacs-lisp
 (setq org-latex-pdf-process (list "latexmk -pdf %f"))
 #+END_SRC
@@ -879,6 +888,11 @@ This makes sure that everything can be a project.
 ** Let projectile call make
 #+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "<f5>") 'projectile-compile-project)
+
+  ;; (use-package compile
+  ;;   :custom
+  ;;   (compile-scroll-buffer t))
+
 #+END_SRC
 
 * Perspectives
@@ -1224,12 +1238,13 @@ person with unusual editor defaults.
 
 * Mail with mu4e
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 
   (use-package mu4e
+    :if (and (eq system-type 'gnu/linux)
+             run-email
+             (display-graphic-p))
     :straight t
-    :if run-email
-    ;; :defer 120
     :load-path "/usr/share/emacs/site-lisp/mu4e"
     
     :config
@@ -1556,7 +1571,7 @@ No more juggling windows after commiting. It's magit bliss.
 #+END_SRC
 
 *** magit-todo converts :TODO, :FIXME to status actions in magit.
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no 
   (use-package magit-todos
     :straight t
     :after magit

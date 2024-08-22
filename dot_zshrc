@@ -269,3 +269,6 @@ remanifest() {
 # opam configuration
 test -r /home/$USER/.opam/opam-init/init.zsh && . /home/$USER/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 eval "$(direnv hook bash)"
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/.local/lib/mojo
+export PATH=$PATH:~/.modular/pkg/packages.modular.com_mojo/bin/
+export LD_LIBRARY_PATH=/home/fade/.local/lib/arch-mojo:$LD_LIBRARY_PATH
