@@ -172,6 +172,7 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
          (let* ((fn-list (dired-get-marked-files nil arg)))
            (mapc 'find-file fn-list)))))
 #+END_SRC
+
 * Jinx for spelling, per SummerEmacs.
 #+begin_src emacs-lisp
   (use-package jinx
@@ -1816,20 +1817,38 @@ This is the way we do in buffer completion. Problem solved.
 
     :config
     (progn
-      (setf sly-lisp-implementations
-            '((sbcl ("sbcl" "--core" "/home/fade/sbcl.core")) ;;"--dynamic-space-size" "8GB"
-              (sbcl-vanilla ("/usr/local/bin/sbcl" "--dynamic-space-size" "2500"))
-              (ccl ("/usr/bin/ros" "-L" "ccl-bin" "run"))
-              ;; (ccl ("/usr/local/bin/ccl"))
-              (abcl ("/usr/local/src/abcl/abcl"))
-              (clisp ("/usr/bin/clisp"))
-              (ecl ("/usr/local/bin/ecl"))
-              (decl ("/usr/bin/ecl"))))
-      (setf sly-kill-without-query-p t
-            sly-net-coding-system 'utf-8-unix
-            sly-complete-symbol*-fancy t
-            sly-default-lisp 'sbcl
-            common-lisp-hyperspec-root "file:///home/fade/SourceCode/lisp/HyperSpec/")
+      (defvar corepath (expand-file-name "sbcl.core" (getenv "HOME")))
+      (if (eql system-type 'gnu/linux)
+          (setf sly-lisp-implementations
+                '((sbcl ("sbcl" "--core" "/home/fade/sbcl.core")) ;;"--dynamic-space-size" "8GB"
+                  (sbcl-vanilla ("/usr/local/bin/sbcl" "--dynamic-space-size" "2500"))
+                  (ccl ("/usr/bin/ros" "-L" "ccl-bin" "run"))
+                  ;; (ccl ("/usr/local/bin/ccl"))
+                  (abcl ("/usr/local/src/abcl/abcl"))
+                  (clisp ("/usr/bin/clisp"))
+                  (ecl ("/usr/local/bin/ecl"))
+                  (decl ("/usr/bin/ecl")))
+                sly-kill-without-query-p t
+                sly-net-coding-system 'utf-8-unix
+                sly-complete-symbol*-fancy t
+                sly-default-lisp 'sbcl
+                common-lisp-hyperspec-root "file:///home/fade/SourceCode/lisp/HyperSpec/")
+        ;; else it's probably darwin, $HOME in /Users
+        (setf sly-lisp-implementations
+              '((sbcl ("sbcl" "--core" "/Users/fade/sbcl.core")) ;;"--dynamic-space-size" "8GB"
+                (sbcl-vanilla ("/usr/local/bin/sbcl" "--dynamic-space-size" "2500"))
+                (ccl ("/usr/bin/ros" "-L" "ccl-bin" "run"))
+                ;; (ccl ("/usr/local/bin/ccl"))
+                (abcl ("/usr/local/src/abcl/abcl"))
+                (clisp ("/usr/bin/clisp"))
+                (ecl ("/usr/local/bin/ecl"))
+                (decl ("/usr/bin/ecl")))
+              sly-kill-without-query-p t
+              sly-net-coding-system 'utf-8-unix
+              sly-complete-symbol*-fancy t
+              sly-default-lisp 'sbcl
+              common-lisp-hyperspec-root "file:///home/fade/SourceCode/lisp/HyperSpec/"))
+
       (require 'sly-autoloads)
       (load "~/quicklisp/log4sly-setup.el")
       (add-to-list 'load-path "~/SourceCode/lisp/emacs_stuff/sly-stepper")
