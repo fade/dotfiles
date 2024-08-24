@@ -1,1 +1,1 @@
-/home/fade/emacs-config/emacs-for-common-lisp
+~/emacs-config/emacs-for-common-lisp
