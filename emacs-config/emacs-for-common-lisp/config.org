@@ -281,6 +281,11 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
     "d" #'org-ql-find-in-org-directory
     "i" #'org-ql-view-recent-items)
 
+  (defvar-keymap prefix-buffer-map-r
+    :doc "Prefix map for C-q for frame configuration to register"
+    "r" #'frameset-to-register
+    "j" #'jump-to-register)
+
   (defvar-keymap prefix-buffer-map-s
     :doc "Prefix map for C-q for spelling"
     ;; "o" #'osx-dictionary-search-word-at-point
@@ -313,6 +318,7 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
     "o" prefix-buffer-map-o
     "p" prefix-buffer-map-p
     "q" 'prefix-buffer-map-q
+    "r" prefix-buffer-map-r
     "s" prefix-buffer-map-s
     "t" prefix-buffer-map-t
     "u" prefix-buffer-map-u
@@ -330,6 +336,7 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
     "o" `("Org" . ,prefix-buffer-map-o)
     "p" `("Packages" . ,prefix-buffer-map-p)
     "q" `("Org-ql" . ,prefix-buffer-map-q)
+    "r" `("WindowRegisters" . ,prefix-buffer-map-r)
     "s" `("Spelling/Dictionary/Jinx" . ,prefix-buffer-map-s)
     "t" `("Terminals" . ,prefix-buffer-map-t)
     "u" `("Undo Tree" . ,prefix-buffer-map-u)
@@ -1054,6 +1061,7 @@ Return to the subject of previous sessions fast quick.
 
   ;; Function to set a random picture as the startup banner
   (defun set-random-startup-banner ()
+    (interactive)
     (setq dashboard-startup-banner (get-random-file dashboard-banner-dir)))
 
   (use-package dashboard
