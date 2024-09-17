@@ -2,15 +2,15 @@
 
 clear;
 
-sudo aura -Syyu
+ aura -Syyu
 
-# -t emacs-29
-pushd $HOME/system_scripts/ || exit 1
+ # -t emacs-29
+ pushd $HOME/system_scripts/ || exit 1
 
-clear; ./build-emacs.sh -t master -p 20 &&
+ clear; ./build-emacs.sh -t master &&
 
-pushd $HOME/SourceCode/emacs/ || exit 1
+     pushd $HOME/SourceCode/emacs/ || exit 1
 
-./src/emacs --version &&
-    git log
+ ./src/emacs --version &&
+     git log
 
