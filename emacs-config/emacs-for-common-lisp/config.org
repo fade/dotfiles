@@ -14,7 +14,7 @@ credentials.
 	user-mail-address "fade@deepsky.com")
 #+END_SRC
 
-* Pass the built-in unix password manager, emacs support
+* Pass, the built-in unix password manager, emacs support
 
 #+BEGIN_SRC emacs-lisp
   (use-package pass
@@ -38,6 +38,47 @@ your current buffer.
       (which-key-mode)
       (setq which-key-idle-delay 1))
   #+END_SRC
+
+* Causal Suite of Transient menus
+#+begin_src emacs-lisp
+  (use-package casual-suite
+    :straight t)
+#+end_src
+
+* Popper for popup windows
+popper solves the problem where you summoon a repl or similar to do a calculation, which then disturbs the feng shui of your carefully layed out windows. Popper puts the windows in a popup overlay which can be dismissed into the background after you are done with it.
+#+begin_src emacs-lisp
+  (use-package popper
+    :straight t
+    :hook (after-init . popper-mode)
+    :bind
+    ("C-\\"    . popper-toggle)
+    ("M-\\"    . popper-cycle)
+    ("C-M-\\"  . popper-toggle-type)
+    ("C-c C-z" . +switch-to-popup)
+    :custom
+    (popper-echo-mode t)
+    (popper-mode-line nil)
+    (popper-window-height 0.33)
+    (popper-reference-buffers
+     '("^\\*sly-[^s]" "\\*Messages\\*" "\\*Backtrace\\*" "\\*Warnings\\*"
+       "\\*Agenda Commands\\*" "\\*Org Select\\*" "\\*Capture\\*" "^CAPTURE-.*\\.org*"
+       "\\*Shell Command Output\\*" "Output\\*$" "\\*vc-.*\\**" "\\*eldoc\\*"
+       "^\\*ielm\\*" "^\\*eshell.*\\*$" "^\\*.*shell.*\\*.*$"
+       ("\\*Async Shell Command\\*" . hide)
+       eat-mode geiser-repl-mode cider-repl-mode ajrepl-mode inf-ruby-mode
+       flymake-diagnostics-buffer-mode compilation-mode comint-mode help-mode))
+    :config
+    (defun +switch-to-popup ()
+      "Switch between the last focused window and the popup window."
+      (interactive)
+      (let ((mru-window (get-mru-window nil nil 'not-this-one-dummy))
+            (current-popup (caar popper-open-popup-alist)))
+        (if current-popup
+            (if (eq (selected-window) current-popup)
+                (select-window mru-window)
+              (select-window current-popup))))))
+#+end_src
 
 * Sane defaults
 Sources for this section include [[https://github.com/magnars/.emacs.d/blob/master/settings/sane-defaults.el][Magnar Sveen]] and [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]].
@@ -178,7 +219,6 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
   (use-package jinx
     :straight t
     :hook 'emacs-startup-hook #'global-jinx-mode)
-
 #+end_src
 * Personal keymaps
 #+begin_src emacs-lisp
@@ -235,10 +275,14 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
   (defvar-keymap prefix-buffer-map-casual
     :doc "Prefix map for C-q for casual"
     "a" #'casual-avy-tmenu
+    "g" #'casual-agenda-tmenu
     "i" #'casual-ibuffer-tmenu
     "c" #'casual-calc-tmenu
     "n" #'casual-info-tmenu
-    "d" #'casual-dired-tmenu)
+    "r" #'casual-re-builder-tmenu
+    "b" #'casual-bookmarks-tmenu
+    "d" #'casual-dired-tmenu
+    "e" #'casual-editkit-main-tmenu)
 
   (defvar-keymap prefix-buffer-map-mark
     :doc "Prefix map for C-q for mark"
@@ -304,6 +348,10 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
     "u" #'undo-tree-undo
     "r" #'undo-tree-redo)
 
+  (defvar-keymap prefix-buffer-map-w
+    :doc "Prefix map for C-q for web"
+    "o" #'open-link-at-point-or-minibuffer-with-choice)
+
   (defvar-keymap prefix-command-q
     :doc "Prefix Map for C-q:"
     "0" prefix-buffer-map-0
@@ -322,7 +370,7 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
     "s" prefix-buffer-map-s
     "t" prefix-buffer-map-t
     "u" prefix-buffer-map-u
-    "w" 'world-clock)
+    "w" prefix-buffer-map-w)
 
   (which-key-add-keymap-based-replacements prefix-command-q
     "0" `("0x0" . ,prefix-buffer-map-0)
@@ -636,12 +684,36 @@ Makes it all look a bit nicer, I hate looking at asterisks. Also, see
 =org-mode-setup= configuration function at the top of this file.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-bullets
+  ;; (use-package org-bullets
+  ;;   :straight t
+  ;;   :after org
+  ;;     :hook (org-mode . org-bullets-mode)
+  ;;     :custom
+  ;;     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+  (use-package org-superstar
     :straight t
     :after org
-      :hook (org-mode . org-bullets-mode)
-      :custom
-      (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+    :hook (org-mode . (lambda ()
+                        (org-superstar-mode 1)))
+    :config
+    (org-superstar-configure-like-org-bullets)
+    ;; Define emoji bullets
+    ;; (setq org-superstar-headline-bullets-list '("💝" "💖" "❤️" "🧡" "💛" "💚" "💜"))
+    ;; (setq org-superstar-headline-bullets-list '("🍉" "🍋" "🍇" "🍐" "🍎" "🍊" "🍓" "🍑"))
+    ;; (setq org-superstar-headline-bullets-list '("🐝" "🦄" "🦋" "🐙" "🐳" "🐬" "🐠" "🐡"))
+    ;; (setq org-superstar-headline-bullets-list '("🎄" "🌳" "🌵" "🪴" "🌴" "🍀" "🌿" "🌱"))
+    ;; (setq org-superstar-headline-bullets-list '("🌼" "🌸" "🌺" "🌻" "🥀" "🌹" "🌷" "💐"))
+    ;; (setq org-superstar-headline-bullets-list '("🐻‍❄️" "🐼" "🐻" "🦊" "🐹" "🐱" "🐶" "🐨"))
+    ;; (setq org-superstar-headline-bullets-list '("☀️" "🌤️" "⛅️" "🌥️" "☁️" "🌦️" "🌧️" "🌨️")) ;; <- Doesn't render some emoji in list
+    ;; (setq org-superstar-headline-bullets-list '("☕️" "🍵" "🥐" "🥮" "🧇" "🥞" "🥚" "🍳"))
+    ;; (setq org-superstar-headline-bullets-list '("🐳" "🪼" "🐙" "🐠" "🐡" "🦀" "🐬" "🐟"))
+    (setq org-superstar-headline-bullets-list    '("🌟" "⭐" "✨" "💫" "👽" "💀" "🤖" "🚀"))
+    ;; (setq org-superstar-headline-bullets-list '("🥃" "🍹" "🧉" "🍷" "🍸" "🍺" "🥂" "🍻"))
+
+    ;; (setq org-superstar-item-bullet-alist '((?+ . "✨") (?- . "🌱") (?* . "⭐️")))
+    ;; (setq org-ellipsis "↴")
+    )
 #+END_SRC
 
 ** Org tags
@@ -1045,6 +1117,7 @@ Taken, with thanks, from [[https://github.com/dakrone/eos/blob/master/eos-web.or
     :straight t
     :after tree-sitter)
 #+end_src
+
 * Dashboard
 Return to the subject of previous sessions fast quick.
 #+BEGIN_SRC emacs-lisp
@@ -1090,7 +1163,7 @@ Return to the subject of previous sessions fast quick.
 
 #+end_src
 
-* List buffers
+* Update Changed File Buffers
 
 source: http://ergoemacs.org/emacs/emacs_buffer_management.html
 
@@ -1849,6 +1922,7 @@ This is the way we do in buffer completion. Problem solved.
                 ;; (ccl ("/usr/local/bin/ccl"))
                 (abcl ("/usr/local/src/abcl/abcl"))
                 (clisp ("/usr/bin/clisp"))
+                (clasp ("/usr/local/bin/clasp"))
                 (ecl ("/usr/local/bin/ecl"))
                 (decl ("/usr/bin/ecl")))
               sly-kill-without-query-p t

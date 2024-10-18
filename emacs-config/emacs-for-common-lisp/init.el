@@ -18,6 +18,7 @@
 ;; I put 'org-spiffs in a subdir of emacs.d, which needs finding:
 (add-to-list 'load-path (expand-file-name "fade/" user-emacs-directory))
 (require 'org-spiffs nil t) ;; rename org-roam buffers to something sane.
+(require 'org-open-links-choice)
 
 ;;; Themes need finding.
 (add-to-list 'custom-theme-load-path
@@ -126,6 +127,10 @@
   (tooltip-mode -1)
   (display-time-mode 1))
 
+(when (not (display-graphic-p))
+  (global-eldoc-mode 1)
+  (xterm-mouse-mode 1))
+
 (set-frame-parameter nil 'fullscreen 'maximized)
 (setq inhibit-startup-message t)
 (setq initial-scratch-message "")
@@ -160,13 +165,14 @@
 ;; Make backups of files, even when they're in version control
 (setq vc-make-backup-files t)
 
+
+
 ;; configure dired early, because it is built in.
 (use-package dired
   :ensure nil
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
   :custom ((dired-listing-switches "-hal --group-directories-first")))
-
 
 ;; start the emacs daemon process.
 (if (display-graphic-p)
