@@ -93,8 +93,8 @@ then
     PS1='$ '
 fi
 
-
-export PROMPT=$'[%n]%B%M%b\:%~\n[%D{%a %b %d} <%*>]\\\>'
+## this prompt dates back thirty years. Held here for posterity.
+# export PROMPT=$'[%n]%B%M%b\:%~\n[%D{%a %b %d} <%*>]\\\>'
 
 export WORDCHARS="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 
@@ -116,7 +116,16 @@ alias et='emacsclient -t'
 
 ## lisp stuff
 
-alias refreeze="cd&&touch sbcl.core&&rm sbcl.core&&clear&&sbcl --eval '(freeze-sbcl)'"
+lispcore (){
+    if [[ -f ~/sbcl.core ]]; then
+        rm sbcl.core
+    fi
+    clear
+    sbcl --eval '(freeze-sbcl)'
+}
+
+# alias refreeze="cd&&touch sbcl.core&&rm sbcl.core&&clear&&sbcl --eval '(freeze-sbcl)'"
+alias refreeze=lispcore
 
 ## emacs setup for gnuclient because of the above aliases
 export ALTERNATE_EDITOR=emacs
@@ -173,7 +182,7 @@ alias lisp='cd $src/lisp/'
 # }
 
 purify (){
-rm -rf ~/.cache/common-lisp/* && rm -rf ~/.slime/fasl/*
+    rm -rf ~/.cache/common-lisp/* && rm -rf ~/.slime/fasl/*
 }
 
 ex () {
@@ -296,7 +305,8 @@ setopt EXTENDED_HISTORY
 # cbdist() {  scp $* maul:public_html/class/  }
 
 bigsbcl (){
-numactl --interleave all sbcl --dynamic-space 4000 --eval "(rr)"
+    numactl --interleave all sbcl --dynamic-space-size 4000 \
+            --control-stack-size 256
 }
 
 kobo (){
