@@ -600,8 +600,8 @@ file if you change this list.
   (use-package emacsql
     :straight t)
 
-  (use-package emacsql-sqlite
-    :straight t)
+  ;; (use-package emacsql-sqlite
+  ;;   :straight t)
 
   (use-package org-roam
     :straight t

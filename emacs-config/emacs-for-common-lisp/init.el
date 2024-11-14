@@ -8,7 +8,7 @@
 (setq load-prefer-newer t)
 
 ;;; Silence compiler warnings from native-comp; they're too disruptive.
-;; (setq native-comp-async-report-warnings-errors nil)
+(setq native-comp-async-report-warnings-errors nil)
 
 ;;; straight is failing due to a reference to a void symbol, the
 ;;; symbol being deprecated and missing in emacs29
@@ -18,7 +18,9 @@
 ;; I put 'org-spiffs in a subdir of emacs.d, which needs finding:
 (add-to-list 'load-path (expand-file-name "fade/" user-emacs-directory))
 (require 'org-spiffs nil t) ;; rename org-roam buffers to something sane.
-(require 'org-open-links-choice)
+
+;;; FIXME the following package can no longer be sourced by straight.
+;; (require 'org-open-links-choice)
 
 ;;; Themes need finding.
 (add-to-list 'custom-theme-load-path
