@@ -145,6 +145,7 @@
                     "local-time"
                     "named-readtables"
                     "net-telent-date"
+                    "njson/jzon"
                     "quickapp"
                     "rutils"
                     "slynk"
