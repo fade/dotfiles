@@ -77,9 +77,8 @@ git checkout $source_tag &&
 echo "[ Done. ]"
 
 git fetch --all && git pull --all &&
-# git checkout master && git fetch --all && git pull --all &&
 
-echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Configuring emacs source code for version $source_tag... "
 
 sleep 3

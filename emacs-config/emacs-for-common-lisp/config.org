@@ -5,6 +5,14 @@
 #+OPTIONS: toc:4 h:4
 #+ATTR_HTML: :style margin-left: auto; margin-right: auto;
 
+* Emacs Startup Profiler
+#+begin_src emacs-lisp
+  (use-package esup
+    :ensure t
+    ;; To use MELPA Stable use ":pin melpa-stable",
+    :pin melpa)
+#+end_src
+
 * Personal Information
 
 Obviously, you'll want to change this to match your personal
@@ -1441,7 +1449,8 @@ This is a configuration file for the GPTel package in Emacs. It sets up the mode
     :straight t
     :config
     (setf  gptel-default-mode 'org-mode
-           gptel-model "codellama:latest"
+           ;; gptel-model "codellama:latest"
+           gptel-model "qwen2.5-coder:7b"
            gptel-directives '((default . "You are a large language model living in Emacs and a helpful assistant. Respond concisely.")
                               (programming . "You are a large language model and a careful programmer and insightful system architect. Provide code and explanation as appropriate.")))
     :bind (("C-c t" . 'gptel-send)
@@ -1451,7 +1460,7 @@ This is a configuration file for the GPTel package in Emacs. It sets up the mode
   (setq gptel-backend (gptel-make-ollama "Ollama"
                         :host "localhost:11434"
                         :stream t
-                        :models '("codellama:latest" "zephyr:latest" "dolphin-mixtral:latest")))
+                        :models '("qwen2.5-coder:7b" "codellama:latest" "zephyr:latest" "llama3.2:latest")))
 #+end_src
 
 #+BEGIN_SRC emacs-lisp :tangle no
@@ -2206,9 +2215,7 @@ Integrates with IPython., using elpy jedi, and virtualenvwrapper.
 
   (use-package lsp-pyright
     :straight t
-    :hook (python-mode . (lambda ()
-                           (require 'lsp-pyright)
-                           (lsp))))
+    :hook (python-mode . lsp))
 
 #+END_SRC
 

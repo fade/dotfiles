@@ -20,7 +20,7 @@
 (require 'org-spiffs nil t) ;; rename org-roam buffers to something sane.
 
 ;;; FIXME the following package can no longer be sourced by straight.
-;; (require 'org-open-links-choice)
+(require 'org-open-links-choice)
 
 ;;; Themes need finding.
 (add-to-list 'custom-theme-load-path
