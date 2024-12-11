@@ -96,7 +96,7 @@ else
     # Custom plugins may be added to $ZSH_CUSTOM/plugins/
     # Example format: plugins=(rails git textmate ruby lighthouse)
     # Add wisely, as too many plugins slow down shell startup.
-    plugins=(git)
+    plugins=(git direnv)
 fi
 
 # bring in oh-my-zsh here.
@@ -275,3 +275,5 @@ eval "$(direnv hook bash)"
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/.local/lib/mojo
 export PATH=$PATH:~/.modular/pkg/packages.modular.com_mojo/bin/:/home/fade/.cargo/bin/
 export LD_LIBRARY_PATH=/home/fade/.local/lib/arch-mojo:$LD_LIBRARY_PATH
+
+export "$(direnv hook zsh)"

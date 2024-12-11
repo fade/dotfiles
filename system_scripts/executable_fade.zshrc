@@ -38,8 +38,6 @@ export PATH="$HOME/system_scripts:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/
 
 # export PATH="/opt/e17/bin:$PATH"
 
-export PYTHONPATH="/opt/e17/lib/python2.7/site-packages:$PYTHONPATH"
-
 #export LESS="-j2 -i -a -c -h6 -q -P[?f%f:|.]?m-[%i of %m].?x-[next\: %x]. (%b?B/%B.B)-(%l?B/%L.L)?L %pB\%."
 export PAGER=most
 export CVS_RSH=ssh
