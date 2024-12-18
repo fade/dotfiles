@@ -546,7 +546,7 @@ file if you change this list.
                       (list (expand-file-name "personal-agenda.org" site-org-files)
                             (expand-file-name "notes.org" site-org-files)
                             (expand-file-name "todos.org" site-org-files)
-                            (expand-file-name "Tasks.org" site-org-files)
+                            (expand-file-name "tasks.org" site-org-files)
                             (expand-file-name "people.org" site-org-files)
                             (expand-file-name "Archive.org" site-org-files)))))
 
