@@ -45,6 +45,25 @@
                       (delete-dups (append file-name-handler-alist
                                            old-file-name-handler-alist))))))
 
+;;; Following from Lionyx <Rahul Juliato> in #systemcrafters
+;;; Native Compile Settings
+;; I use a <emacs-default-dir>/eln-cache-<machine-hostname>/ dir to store
+;; my different machines' eln compiled code. This allows the same config
+;; to be used on several machines without conflicts.
+;; This is added in early-init.el to prevent unwanted recompilations.
+
+(when (featurep 'native-compile)
+  ;; Set the right directory to store the native compilation cache
+  (let ((path (expand-file-name (concat "eln-cache-" (system-name) "/") user-emacs-directory)))
+    (setq-default native-comp-eln-load-path       (list path)
+		  native-compile-target-directory path)
+    (startup-redirect-eln-cache path))
+
+  (setq-default native-comp-async-report-warnings-errors nil  ;; Silence compiler warnings as they can be disruptive
+		native-comp-jit-compilation              t    ;; Enable async native compilation
+		package-native-compile                   t))) ;; Compile installed packages
+
+
 ;; In noninteractive sessions, prioritize non-byte-compiled source files to
 ;; prevent the use of stale byte-code. Otherwise, it saves us a little IO time
 ;; to skip the mtime checks on every *.elc file.
