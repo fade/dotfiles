@@ -20,8 +20,8 @@
 ;;Global Compiler optimisation settings.
 ;;===============================================================================
 
-(sb-ext:restrict-compiler-policy 'speed 3)
-(sb-ext:restrict-compiler-policy 'debug 2)
+;; (sb-ext:restrict-compiler-policy 'speed 3)
+(sb-ext:restrict-compiler-policy 'debug 3)
 
 ;; (sb-ext:restrict-compiler-policy 'safety 3)
 ;; (sb-ext:restrict-compiler-policy 'safety)

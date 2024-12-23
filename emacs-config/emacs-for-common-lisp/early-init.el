@@ -61,7 +61,7 @@
 
   (setq-default native-comp-async-report-warnings-errors nil  ;; Silence compiler warnings as they can be disruptive
 		native-comp-jit-compilation              t    ;; Enable async native compilation
-		package-native-compile                   t))) ;; Compile installed packages
+		package-native-compile                   t))  ;; Compile installed packages
 
 
 ;; In noninteractive sessions, prioritize non-byte-compiled source files to
