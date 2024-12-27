@@ -2208,7 +2208,7 @@ Integrates with IPython., using elpy jedi, and virtualenvwrapper.
 
   (use-package envrc
     :straight t
-    :config (envrc-global-mode))
+    :hook (after-init . envrc-global-mode))
 #+END_SRC
 
 *** Virtualenvwrapper
