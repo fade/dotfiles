@@ -1888,7 +1888,8 @@ This is the way we do in buffer completion. Problem solved.
                  ("<tab>" . corfu-next)
                  ("<backtab>" . corfu-previous)))
     :config
-    (global-corfu-mode))
+    (global-corfu-mode)
+    :hook (after-init . global-corfu-mode))
 #+end_src
 
 * Languages
@@ -2181,10 +2182,8 @@ dialect regularly.
    * C-c C-k :: `skewer-load-buffer'
 
 ** Python
-Integrates with IPython., using elpy jedi, and virtualenvwrapper.
 
 #+BEGIN_SRC emacs-lisp
-
   (use-package lsp-mode
     :straight t)
 
@@ -2212,7 +2211,6 @@ Integrates with IPython., using elpy jedi, and virtualenvwrapper.
 #+END_SRC
 
 *** Virtualenvwrapper
-
 #+BEGIN_SRC emacs-lisp
   (use-package virtualenvwrapper
     :ensure t
@@ -2220,12 +2218,7 @@ Integrates with IPython., using elpy jedi, and virtualenvwrapper.
     :config
     (setq venv-location "~/.virtualenvs"))
 #+END_SRC
-** Typescript mode
- #+BEGIN_SRC emacs-lisp
-  ;; (use-package typescript-mode
-  ;;   :ensure t
-  ;;   :defer t)
-#+END_SRC
+
 
 * Highlight line containing the point
 #+BEGIN_SRC emacs-lisp
