@@ -1254,8 +1254,7 @@ This really is the best PDF management system I've ever used.
     (setf tramp-terminal-type "dumb")
     (add-to-list 'tramp-connection-properties
                  (list (regexp-quote "/ssh:fade@deepsky.com:")
-                       "remote-shell" "/bin/sh"
-                       ))) 
+                       "remote-shell" "/bin/sh"))) 
 #+END_SRC
 
 * Window
@@ -1553,7 +1552,6 @@ This is a configuration file for the GPTel package in Emacs. It sets up the mode
     :after flycheck)
 #+END_SRC
    
-** Completion
 ** Dictionary (Websters) support
 I was struggling to find an acceptable english dictionary for local
 off-line use, and googling lead me to a salubrious link tree, starting
@@ -1893,6 +1891,7 @@ This is the way we do in buffer completion. Problem solved.
 #+end_src
 
 * Languages
+
 ** Common Lisp
 *** SLY
     The jury has returned. Sly is superior to Slime.
@@ -2219,7 +2218,6 @@ dialect regularly.
     (setq venv-location "~/.virtualenvs"))
 #+END_SRC
 
-
 * Highlight line containing the point
 #+BEGIN_SRC emacs-lisp
   (when window-system (add-hook 'prog-mode-hook 'hl-line-mode))
@@ -2430,3 +2428,20 @@ And here's how we tell Emacs which font we want. See [[https://protesilaos.com/e
                    :line-spacing nil))))))
 #+END_SRC
 
+
+* Yasnippet
+
+ Templates for code fragments
+
+ #+begin_src emacs-lisp
+   (use-package yasnippet
+     :straight t
+     :config
+     (define-key yas-minor-mode-map (kbd "M-z") 'yas-expand)
+     (define-key yas-keymap (kbd "M-n") 'yas-next-field-or-maybe-expand)
+     (define-key yas-keymap (kbd "M-p") 'yas-pre-field))
+
+   (use-package yasnippet-snippets
+     :straight t
+     :after yasnippet)
+ #+end_src
