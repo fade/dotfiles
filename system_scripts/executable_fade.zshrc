@@ -141,6 +141,7 @@ alias j='jobs -l'
 
 alias odeon='ssh -l $USER -X 192.168.1.67'
 alias digi='ssh -l root api.dev2.digisphereinc.com'
+alias banshee='ssh -l brian lazyninja.tplinkdns.com'
 alias vex='ssh shell.vex.net'
 alias vader='ssh vader.deepsky.com'
 alias outrider='ssh outrider.deepsky.com'
