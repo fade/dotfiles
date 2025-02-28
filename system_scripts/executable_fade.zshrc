@@ -49,6 +49,8 @@ export FREEGUIDE_OPTS="-DproxySet=true -DproxyHost=http://127.0.0.1 -DproxyPort=
 
 # Guix requires certain state to function 
 export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
+export GUIX_PROFILE="/home/fade/.guix-profile"
+. "$GUIX_PROFILE/etc/profile"
 
 ## tech.coop vacation messenger host
 # alias vacat='ssh -l mailmon 74.115.254.23'
@@ -141,7 +143,10 @@ alias j='jobs -l'
 
 alias odeon='ssh -l $USER -X 192.168.1.67'
 alias digi='ssh -l root api.dev2.digisphereinc.com'
+
+# Dan's edge machine.
 alias banshee='ssh -l brian lazyninja.tplinkdns.com'
+
 alias vex='ssh shell.vex.net'
 alias vader='ssh vader.deepsky.com'
 alias outrider='ssh outrider.deepsky.com'
