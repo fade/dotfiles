@@ -33,14 +33,13 @@
 ;; where we hold transient saves and other such data. The arity of
 ;; files--ensure-directory changed from emacs29 to emacs30.
 
-(if (version<= emacs-version "29.4")
+(if (version<= emacs-version "28")
     (progn
       (files--ensure-directory 'make-directory-internal (expand-file-name "config/" user-emacs-directory))
       (files--ensure-directory 'make-directory-internal (expand-file-name "data/" user-emacs-directory)))
   (progn
     (files--ensure-directory (expand-file-name "config/" user-emacs-directory))
     (files--ensure-directory (expand-file-name "data/" user-emacs-directory))))
-
 
 ;;; Set up package
 (require 'package)
@@ -119,7 +118,6 @@
          (setq org-support-shift-select 'always)
          ;; rename org-roam buffers to their enclosed #+TITLE
          (add-hook 'org-mode-hook 'fade/org-mode-rename-buffer)))
-
 
 ;;; Begin initialization
 ;; Turn off mouse interface early in startup to avoid momentary display
