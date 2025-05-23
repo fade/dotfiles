@@ -33,24 +33,6 @@ servers = (
     tls_verify = "no";
     autoconnect = "yes";
     starttls = "yes";
-  },
-  {
-    address = "irc.libera.chat";
-    chatnet = "libera";
-    port = "6667";
-    use_tls = "no";
-    tls_verify = "no";
-    autoconnect = "yes";
-    starttls = "yes";
-  },
-  {
-    address = "irc.whine.com";
-    chatnet = "SRHNet";
-    port = "6667";
-    use_tls = "no";
-    tls_verify = "no";
-    autoconnect = "yes";
-    starttls = "yes";
   }
 );
 
