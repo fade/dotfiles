@@ -309,7 +309,7 @@ setopt EXTENDED_HISTORY
 # cbdist() {  scp $* maul:public_html/class/  }
 
 bigsbcl (){
-    numactl --interleave all sbcl --dynamic-space-size 4000 \
+    numactl --interleave all sbcl --dynamic-space-size 12000 \
             --control-stack-size 256
 }
 
