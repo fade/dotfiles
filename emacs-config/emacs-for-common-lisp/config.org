@@ -621,6 +621,7 @@ file if you change this list.
     :init
     (setq org-roam-v2-ack t)
     :config
+    (setf org-web-tools-pandoc-sleep-time 2.0)
     (setf org-roam-directory (expand-file-name "Roam/" site-org-files))
     (setf org-roam-dailies-directory (expand-file-name "Dailies/" org-roam-directory))
 
@@ -1468,6 +1469,19 @@ This is a configuration file for the GPTel package in Emacs. It sets up the mode
                         :models '("deepseek-r1:7b" "codellama:latest" "zephyr:latest" "llama3.2:latest")))
 #+end_src
 
+Ollama Buddy is an Emacs package that provides a friendly AI assistant
+for various tasks such as code refactoring, generating commit messages,
+dictionary lookups, and more.  It interacts with the Ollama server to
+perform these tasks.
+
+#+begin_src emacs-lisp
+    (use-package ollama-buddy
+      :straight t
+      :bind
+      ("C-c o" . ollama-buddy-menu)
+      ("C-c O" . ollama-buddy-transient-menu-wrapper))
+#+end_src
+
 #+BEGIN_SRC emacs-lisp :tangle no
 
   (use-package chatgpt-arcana
@@ -1898,7 +1912,11 @@ This is the way we do in buffer completion. Problem solved.
 
 * Languages
 
-** Janet 
+** Clojure
+
+
+
+** Janet
 
 #+begin_src emacs-lisp
   (use-package janet-mode
@@ -1927,7 +1945,8 @@ This is the way we do in buffer completion. Problem solved.
       (defvar corepath (expand-file-name "sbcl.core" (getenv "HOME")))
       (if (eql system-type 'gnu/linux)
           (setf sly-lisp-implementations
-                '((sbcl ("sbcl" "--core" "/home/fade/sbcl.core")) ;;"--dynamic-space-size" "8GB"
+                '(;; (sbcl ("sbcl" "--core" "/home/fade/sbcl.core")) ;;"--dynamic-space-size" "8GB"
+                  (sbcl ("sbcl" "--dynamic-space-size" "2500"))
                   (sbcl-vanilla ("/usr/local/bin/sbcl" "--dynamic-space-size" "2500"))
                   (ccl ("/usr/bin/ros" "-L" "ccl-bin" "run"))
                   ;; (ccl ("/usr/local/bin/ccl"))
@@ -1956,6 +1975,7 @@ This is the way we do in buffer completion. Problem solved.
               sly-complete-symbol*-fancy t
               sly-default-lisp 'sbcl
               common-lisp-hyperspec-root "file:///home/fade/SourceCode/lisp/HyperSpec/"))
+
       (defun my-sly-mrepl-goto-end (&rest _)
         "Force the prompt to the bottom of the REPL window."
         (with-selected-window (get-buffer-window (sly-mrepl))

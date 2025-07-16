@@ -121,7 +121,7 @@ lispcore (){
         rm sbcl.core
     fi
     clear
-    sbcl --eval '(freeze-sbcl)'
+    sbcl --dynamic-space-size 4000 --eval '(freeze-sbcl)'
 }
 
 # alias refreeze="cd&&touch sbcl.core&&rm sbcl.core&&clear&&sbcl --eval '(freeze-sbcl)'"
