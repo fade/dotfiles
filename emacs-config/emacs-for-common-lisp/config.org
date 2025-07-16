@@ -970,15 +970,6 @@ Projectile is an awesome project manager, mostly because it recognizes
 directories with a =.git= directory as projects and helps you manage
 them accordingly.
 
-** Enable projectile globally
-This makes sure that everything can be a project.
-#+BEGIN_SRC emacs-lisp :tangle no
-  (use-package projectile
-    :straight t
-    :init
-    (projectile-mode 1))
-#+END_SRC
-
 ** Let projectile call make
 #+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "<f5>") 'projectile-compile-project)
@@ -1717,7 +1708,7 @@ Workspaces in Emacs.
 
 Project navigation and management library for Emacs.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package projectile
   :ensure t
   :diminish projectile-mode
