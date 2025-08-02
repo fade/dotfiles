@@ -107,11 +107,11 @@
 
 
 ;; just use uiop for this stuff.
-(defmacro command-string (command &rest args)
-  (let ((stream (gensym)))
-    `(strip-surrounding-whitespace
-      (with-output-to-string (,stream)
-        (sb-ext:run-program ,command '(,@args) :output ,stream)))))
+;; (defmacro command-string (command &rest args)
+;;   (let ((stream (gensym)))
+;;     `(strip-surrounding-whitespace
+;;       (with-output-to-string (,stream)
+;;         (sb-ext:run-program ,command '(,@args) :output ,stream)))))
 
 
 (defun uptime ()
