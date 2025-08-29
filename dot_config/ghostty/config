@@ -4,26 +4,26 @@ font-size = 11
 
 # Ghostty color theme based on deepsky-modus-fade-theme.el
 
-[colors]
+# [colors]
 foreground = "#ffffff"
 background = "#000000"
 
-# Normal colors
-black = "#000000"
-red = "#ff8059"
-green = "#44bc44"
-yellow = "#eecc00"
-blue = "#2fafff"
-magenta = "#feacd0"
-cyan = "#00d3d0"
-white = "#ffffff"
+# # Normal colors
+# black = "#000000"
+# red = "#ff8059"
+# green = "#44bc44"
+# yellow = "#eecc00"
+# blue = "#2fafff"
+# magenta = "#feacd0"
+# cyan = "#00d3d0"
+# white = "#ffffff"
 
-# Bright colors
-bright_black = "#a8a8a8"
-bright_red = "#ffb9ab"
-bright_green = "#9ff0cf"
-bright_yellow = "#e2d980"
-bright_blue = "#8ec6ff"
-bright_magenta = "#ffcaf0"
-bright_cyan = "#8ae4f2"
-bright_white = "#c6eaff"
+# # Bright colors
+# bright_black = "#a8a8a8"
+# bright_red = "#ffb9ab"
+# bright_green = "#9ff0cf"
+# bright_yellow = "#e2d980"
+# bright_blue = "#8ec6ff"
+# bright_magenta = "#ffcaf0"
+# bright_cyan = "#8ae4f2"
+# bright_white = "#c6eaff"
