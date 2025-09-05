@@ -7,7 +7,7 @@
 num_jobs=$(cat /proc/cpuinfo | grep 'core id' | wc -l)
 source_location=$HOME/SourceCode/emacs
 source_tag=master
-
+emacs_repo="https://github.com/emacs-mirror/emacs.git"
 # do the options
 
 while getopts g:p:s:t: flag
@@ -43,8 +43,8 @@ if [[ -d $emacs_src ]]
 then
     cd $emacs_src
 else
-    echo "Cloning emacs source from git://git.savannah.gnu.org/emacs.git"
-    git clone git://git.savannah.gnu.org/emacs.git $emacs_src
+    echo "Cloning emacs source from $emacs_repo"
+    git clone "$emacs_repo" "$emacs_src"
     cd $emacs_src
     echo [Done.]
 fi

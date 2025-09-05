@@ -2124,12 +2124,14 @@ dialect regularly.
 ** Web Development Utilities
 web-mode provides syntax support for html typed and related files.
 #+begin_src emacs-lisp
+  (require 'lass) ;; mode to support shinmera's common lisp LASS compiler
+
   (use-package web-mode
     :straight t
     :mode
     (("\\.phtml\\'" . web-mode)
-     ("\\.chtml\\'" . web-mode)
      ("\\.ctml\\'" . web-mode)
+     ("\\.chtml\\'" . web-mode)
      ("\\.php\\'" . web-mode)
      ("\\.tpl\\'" . web-mode)
      ("\\.[agj]sp\\'" . web-mode)
