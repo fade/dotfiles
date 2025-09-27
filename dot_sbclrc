@@ -154,6 +154,13 @@
   #+sbcl
   (sb-ext:save-lisp-and-die "sbcl.core" :compression 22))
 
+(defun let-us-begin (&key (port 4005))
+  (if (find-package :slynk)
+      (progn
+        (bt:make-thread (lambda () (slynk:create-server :port port :dont-close t)))
+        (setf slynk:*use-dedicated-output-stream* nil))
+    (error "Slynk is not loaded in this image")))
+
 (defun heron-area-triangle (a b d)
   "Calculate the area of a triangle whose sides are of known length.
 In geometry, Heron's formula (or Hero's formula) gives the area of a
