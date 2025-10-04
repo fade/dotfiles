@@ -4,6 +4,7 @@
 
 (load "~/quicklisp/setup.lisp")
 (use-package :ql)
+(quickload '(bordeaux-threads slynk))
 
 ;; /quicklisp
 
