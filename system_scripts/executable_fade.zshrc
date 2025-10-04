@@ -161,6 +161,9 @@ alias media='lftp sftp://fade@mortar.walled.net:/home/fade/media/'
 alias mortar='ssh mortar.walled.net'
 alias lilith='ssh lilith.icomm.ca'
 
+### asteroid.radio hosts
+alias asteroid='ssh b612.asteroid.radio'
+
 ### cicada hosts
 alias r2='ssh 198.96.119.201'
 alias r3='ssh ec2-184-73-118-130.compute-1.amazonaws.com'
