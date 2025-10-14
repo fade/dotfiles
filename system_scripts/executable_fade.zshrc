@@ -162,7 +162,8 @@ alias mortar='ssh mortar.walled.net'
 alias lilith='ssh lilith.icomm.ca'
 
 ### asteroid.radio hosts
-alias asteroid='ssh b612.asteroid.radio'
+alias asteroid='ssh asteroid.radio'
+alias b612='ssh b612.asteroid.radio'
 
 ### cicada hosts
 alias r2='ssh 198.96.119.201'
