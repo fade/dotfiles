@@ -48,9 +48,11 @@ export NNTP='nntp.netcom.ca'
 export FREEGUIDE_OPTS="-DproxySet=true -DproxyHost=http://127.0.0.1 -DproxyPort=3129"
 
 # Guix requires certain state to function 
-export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
-export GUIX_PROFILE="/home/fade/.guix-profile"
-. "$GUIX_PROFILE/etc/profile"
+if [[ $HOSTNAME = "ghost" ]]; then
+    export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
+    export GUIX_PROFILE="/home/fade/.guix-profile"
+    . "$GUIX_PROFILE/etc/profile"
+fi
 
 ## tech.coop vacation messenger host
 # alias vacat='ssh -l mailmon 74.115.254.23'
@@ -85,13 +87,13 @@ zstyle ':completion:*' hosts $_myhosts
 
 if [ "$TERM" = "dumb" ]
 then
-    unsetopt zle
-    unsetopt prompt_cr
-    unsetopt prompt_subst
-    #    unfunction precmd
-    #    unfunction preexec
-    PS1='$ '
-fi
+           unsetopt zle
+           unsetopt prompt_cr
+           unsetopt prompt_subst
+           #    unfunction precmd
+           #    unfunction preexec
+           PS1='$ '
+       fi
 
 ## this prompt dates back thirty years. Held here for posterity.
 # export PROMPT=$'[%n]%B%M%b\:%~\n[%D{%a %b %d} <%*>]\\\>'
