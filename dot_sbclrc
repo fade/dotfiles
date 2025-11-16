@@ -115,11 +115,11 @@
 ;;         (sb-ext:run-program ,command '(,@args) :output ,stream)))))
 
 
-(defun uptime ()
-  (command-string "/usr/bin/uptime"))
+;; (defun uptime ()
+;;   (command-string "/usr/bin/uptime"))
 
-(defun w ()
-  (command-string "/usr/bin/w"))
+;; (defun w ()
+;;   (command-string "/usr/bin/w"))
 
 (defun rr ()
   (quickload :cicada-dispatcher)
@@ -155,12 +155,12 @@
   #+sbcl
   (sb-ext:save-lisp-and-die "sbcl.core" :compression 22))
 
-(defun let-us-begin (&key (port 4005))
-  (if (find-package :slynk)
-      (progn
-        (bt:make-thread (lambda () (slynk:create-server :port port :dont-close t)))
-        (setf slynk:*use-dedicated-output-stream* nil))
-    (error "Slynk is not loaded in this image")))
+;; (defun let-us-begin (&key (port 4005))
+;;   (if (find-package :slynk)
+;;       (progn
+;;         (bt:make-thread (lambda () (slynk:create-server :port port :dont-close t)))
+;;         (setf slynk:*use-dedicated-output-stream* nil))
+;;     (error "Slynk is not loaded in this image")))
 
 (defun heron-area-triangle (a b d)
   "Calculate the area of a triangle whose sides are of known length.

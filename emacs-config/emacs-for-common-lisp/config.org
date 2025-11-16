@@ -5,6 +5,15 @@
 #+OPTIONS: toc:4 h:4
 #+ATTR_HTML: :style margin-left: auto; margin-right: auto;
 
+#+begin_src emacs-lisp
+  ;;; config.el ---  DeepSky emacs config file -*- lexical-binding: t; -*-
+  ;;; Commentary: free code, clear conscience.
+  ;;; Copyright (c) 2018-2025 Brian O'Reilly <fade@deepsky.com>
+
+  ;;; Code:
+
+#+end_src
+
 * Emacs Startup Profiler
 #+begin_src emacs-lisp
   (use-package esup
@@ -109,12 +118,21 @@ package by Bodizar Bhatzov.
     (require 'no-littering))
 #+end_src
 
+Calling use-package with 'emacs as the package target alows top level
+init overrides of things done in early-init.el or in init.el
+
 #+begin_src emacs-lisp
   (use-package emacs
     :init
-    ;; enable indentation+completion using the TAB key.
+    ;; global emacs things here, often to override things that happened
+    ;; in init.el enable indentation+completion using the TAB key.
+
     ;; 'completion-at-point is often bound to M-TAB
-    (setq tab-always-indent 'complete))
+    (setq tab-always-indent 'complete)
+    (diminish 'eldoc-mode "elD")
+    (diminish 'org-indent-mode)
+    (diminish 'beacon-mode))
+
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
@@ -425,7 +443,7 @@ file, and also when you enter an org file of any kind, where the
 configuration around faces and org functions just doesn't work.
 
 On Org mode version 9 I wasn't able to execute source blocks out of
-the box. [[https://emacs.stackexchange.com/a/28604][Others have run into the same issue too]]. The solution is to
+the box. [[https://emacs.stackexchange.com/a/28604][Others have run into the same issue, also]]. The solution is to
 remove the .elc files from the package directory:
 
 #+BEGIN_SRC sh :var ORG_DIR=(let* ((org-v (cadr (split-string (org-version nil t) "@"))) (len (length org-v))) (substring org-v 1 (- len 2)))
@@ -1651,6 +1669,13 @@ access magit.
     :after magit
     :config
     (setq auth-source '("~/.authinfo")))
+
+  (use-package git-ps1-mode
+    :straight t
+    :after magit
+    :config
+    (add-hook 'prog-mode-hook 'git-ps1-mode)
+    (add-hook 'dired-mode-hook 'git-ps1-mode))
 #+END_SRC
 
 *** Fullscreen magit
@@ -1940,7 +1965,7 @@ This is the way we do in buffer completion. Problem solved.
 
     :config
     (progn
-      (defvar  sly-elide-output nil)
+      (defvar sly-elide-output nil)
       (defvar corepath (expand-file-name "sbcl.core" (getenv "HOME")))
       (if (eql system-type 'gnu/linux)
           (setf sly-lisp-implementations
@@ -2269,7 +2294,7 @@ web-mode provides syntax support for html typed and related files.
 
   (use-package envrc
     :straight t
-    :hook (after-init . envrc-global-mode))
+    :hook (after-init . python-mode-hook))
 #+END_SRC
 
 *** Virtualenvwrapper
