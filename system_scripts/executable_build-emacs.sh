@@ -87,7 +87,7 @@ sleep 3
 
 
 ## native comp
-if [[ ( $kind == "native" ) ]]; then
+if [[ ( $kind == "native" ) ]]; then #native is default
     echo "Configuring with emacs Native Compilation for elisp..."
     sleep 10
     ./configure --with-native-compilation --with-gnutls --with-imagemagick --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xml2 --with-json
@@ -99,6 +99,7 @@ elif [[ ( $kind == "nonative" ) ]]; then #no native comp
 
 elif [[ ( $kind == "puregtk" ) ]]; then
     ./configure --with-dbus --with-giv --with-jpeg --with-png --with-rsvg --with-tiff --with-xft --with-xpm --with-gpm --with-xwidgets --with-modules --with-native-comp --with-pgtk
+    
 elif [[ ( $kind == "nox" ) ]]; then #no x-windows
     echo "Configuring with emacs Native Compilation and *NO* X-Windows support"
     sleep 10
