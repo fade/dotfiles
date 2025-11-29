@@ -8,15 +8,17 @@ num_jobs=$(cat /proc/cpuinfo | grep 'core id' | wc -l)
 source_location=$HOME/SourceCode/emacs
 source_tag=master
 emacs_repo="https://github.com/emacs-mirror/emacs.git"
-# do the options
+kind=native
 
-while getopts g:p:s:t: flag
+# do the options
+while getopts g:p:s:t:k: flag
 do
     case "${flag}" in
         g) puregtk=${OPTARG};;
         p) num_jobs=${OPTARG};;
         s) source_location=${OPTARG};;
         t) source_tag=${OPTARG};;
+        k) kind=${OPTARG};;
     esac
 done
 
@@ -85,18 +87,20 @@ sleep 3
 
 
 ## native comp
-echo "Configuring with emacs Native Compilation for elisp..."
-./configure --with-native-compilation --with-gnutls --with-imagemagick --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xml2 --with-json
+if [[ ( $kind == "native" ) ]]; then
+    echo "Configuring with emacs Native Compilation for elisp..."
+    ./configure --with-native-compilation --with-gnutls --with-imagemagick --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xml2 --with-json
 
-## no native comp
-# ./configure --with-gnutls --with-imagemagick --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xml2
+elif [[ ( $kind == "nonative" ) ]]; then #no native comp
+    ./configure --with-gnutls --with-imagemagick --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xml2
 
-# if ( $puregtk )
-# then
-#     ./configure --with-dbus --with-giv --with-jpeg --with-png --with-rsvg --with-tiff --with-xft --with-xpm --with-gpm --with-xwidgets --with-modules --with-native-comp --with-pgtk
-# else
-#     ./configure --with-native-compilation --with-gnutls --with-imagemagick --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xml2
-# fi
+elif [[ ( $kind == "puregtk" ) ]]; then
+    ./configure --with-dbus --with-giv --with-jpeg --with-png --with-rsvg --with-tiff --with-xft --with-xpm --with-gpm --with-xwidgets --with-modules --with-native-comp --with-pgtk
+elif [[ ( $kind == "nox" ) ]]; then #no x-windows
+    echo "Configuring with emacs Native Compilation and *NO* X-Windows support"
+    sleep 10
+    ./configure --with-native-compilation --with-gnutls --without-x --with-wide-int --with-xml2
+fi
 
 echo "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 echo "Configured. Building with $num_jobs workers..."
