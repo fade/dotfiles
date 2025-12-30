@@ -17,6 +17,15 @@ servers = (
     starttls = "yes";
   },
   {
+    address = "irc.whine.com";
+    chatnet = "SRHNet";
+    port = "6667";
+    use_tls = "no";
+    tls_verify = "no";
+    autoconnect = "yes";
+    starttls = "yes";
+  },
+  {
     address = "irc.libera.chat";
     chatnet = "libera";
     port = "6667";
@@ -26,8 +35,8 @@ servers = (
     starttls = "yes";
   },
   {
-    address = "irc.whine.com";
-    chatnet = "SRHNet";
+    address = "irc.libera.chat";
+    chatnet = "libera";
     port = "6667";
     use_tls = "no";
     tls_verify = "no";
@@ -61,8 +70,8 @@ chatnets = {
 };
 
 channels = (
-  { name = "#trinity"; chatnet = "SRHNet"; autojoin = "yes"; },
+  # { name = "#trinity"; chatnet = "SRHNet"; autojoin = "yes"; },
   # { name = "#cyberspace"; chatnet = "Clonquistes"; autojoin = "yes"; },
-  { name = "#busted"; chatnet = "SRHNet"; autojoin = "yes"; },
-  # { name = "#deepsky"; chatnet = "libera"; autojoin = "yes"; }
+  # { name = "#busted"; chatnet = "SRHNet"; autojoin = "yes"; },
+  { name = "#deepsky"; chatnet = "libera"; autojoin = "yes"; }
 );
