@@ -27,3 +27,7 @@ background = "#000000"
 # bright_magenta = "#ffcaf0"
 # bright_cyan = "#8ae4f2"
 # bright_white = "#c6eaff"
+
+window-decoration = "none"
+gtk-titlebar = false
+gtk-wide-tabs = false
