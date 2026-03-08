@@ -31,19 +31,19 @@ style = "Beam"
 size = 11
 
 [font.bold]
-family = "Envy Code R"
+family = "EnvyCodeR Nerd Font"
 style = "Bold"
 
 [font.bold_italic]
-family = "Envy Code R"
+family = "EnvyCodeR Nerd Font"
 style = "Bold Italic"
 
 [font.italic]
-family = "Envy Code R"
+family = "EnvyCodeR Nerd Font"
 style = "Italic"
 
 [font.normal]
-family = "Envy Code R"
+family = "EnvyCodeR Nerd Font"
 style = "Regular"
 
 [general]

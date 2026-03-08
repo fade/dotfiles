@@ -129,9 +129,11 @@
  '(cua-normal-cursor-color "#839496")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
- '(custom-enabled-themes '(deepsky))
+ '(custom-enabled-themes '(deepsky-moonunit))
  '(custom-safe-themes
-   '("7e377879cbd60c66b88e51fad480b3ab18d60847f31c435f15f5df18bdb18184"
+   '("6dcce19a836c6395ab0e4db1ffb952bf0d378f6534c449d3a55493e274e06ceb"
+     "8bc56ff700e800462880f1b1126faf954b695745b1b6864b0804c5a04a52253e"
+     "7e377879cbd60c66b88e51fad480b3ab18d60847f31c435f15f5df18bdb18184"
      "7212337b36e4cce2628c9451173d910c728b5a760a0ce17cf82cd41af907bd9b"
      "7e22a8dcf2adcd8b330eab2ed6023fa20ba3b17704d4b186fa9c53f1fab3d4d2"
      "893e6ba11e50a0f2007d0fe67e0d16e9c04aa016ecfd9892c8ed3233d98cecd3"
@@ -198,46 +200,6 @@
      "#2aa198" "#d33682" "#6c71c4"))
  '(objed-cursor-color "#ff5555")
  '(org-src-content-indentation 2 nil nil "Customized with use-package org")
- '(package-selected-packages
-   '(embark marginalia orderless consult vertico ob-restclient
-            terraform-doc terraform-mode telephone-line 0x0
-            lorem-ipsum bug-hunter setup forge yasnippet avy
-            spaceline-all-the-icons perspective dockerfile-mode docker
-            company-quickhelp hydra orgtbl-aggregate abyss-theme
-            sparql-mode pdf-tools extempore-mode helpful skeletor
-            :skeletor spaceline-config modus-vivendi-theme
-            all-the-icons-dired dired-single jedi doct
-            visual-fill-column which-key doom-modeline doom-themes
-            color-identifiers-mode flycheck-eslint flycheck-nim
-            flycheck-clojure flycheck-cython flycheck-ido
-            company-org-roam org-roam-server org-roam-bibtex org-roam
-            ac-helm ac-sly sly-ac helm-sly :flycheck yatemplate
-            sly-quicklisp sly-repl-ansi-color nim-mode :sly-quicklisp
-            sly-repl-ansi-colors sly-named-readtables sly-macrostep
-            nord-theme northcode-theme nova-theme sly-asdf
-            all-the-icons sly buffer-move slime yasnippet-snippets
-            helm-ispell magithub helm-slime csv csv-mode slime-helm
-            eww-lnum symon undotree common-lisp-snippets swiper
-            projectile diminish smart-mode-line-powerline-theme
-            fancy-battery spaceline dashboard pretty-mode
-            color-theme-approximate 2048-game org-bullets beacon
-            jinja2-mode company-ansible ansible-vault ansible-doc zoom
-            ansible htmlize hcl-mode helm-w3m :helm-w3m w3m yaml-mode
-            paredit shell-pop scratch zoom-frm emmet-mode
-            visual-regexp-steroids visual-regexp typescript-mode
-            smooth-scrolling skewer-mode smartscan restclient geiser
-            racket-mode olivetti multiple-cursors markdown-mode
-            macrostep gist flycheck expand-region magit helm-swoop
-            helm-ag helm-projectile helm company clojure-mode c-eldoc
-            android-mode ace-window ace-jump-mode ag ido-vertical-mode
-            transpose-frame ox-pandoc company-jedi js-auto-beautify
-            js-comint js-doc js-format js-import js2-refactor loccur
-            hexrgb purple-haze-theme heroku-theme company-anaconda
-            elpy rainbow-mode slime-repl-ansi-color slime-company
-            rust-mode crux undo-tree latex-preview-pane latex-extra
-            xquery-mode virtualenvwrapper quickrun
-            exec-path-from-shell page-break-lines solarized-theme
-            cyberpunk-theme))
  '(pdf-view-midnight-colors (cons "#f8f8f2" "#282a36"))
  '(pos-tip-background-color "#073642")
  '(pos-tip-foreground-color "#93a1a1")
@@ -366,7 +328,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Envy Code R" :foundry "ENVY" :slant normal :weight regular :height 100 :width normal))))
  '(avy-lead-face ((t (:background "medium blue" :foreground "yellow"))))
  '(avy-lead-face-2 ((t (:background "dark turquoise" :foreground "midnight blue"))))
  '(company-scrollbar-bg ((t (:background "#199919991999"))) t)
@@ -379,7 +340,7 @@
  '(erc-input-face ((t (:foreground "spring green"))))
  '(erc-my-nick-face ((t (:foreground "magenta" :weight bold))))
  '(font-lock-constant-face ((t (:foreground "#00ff7f"))))
- '(font-lock-string-face ((t (:foreground "cornsilk3"))))
+ '(font-lock-string-face ((t (:foreground "lightyellow1"))))
  '(helm-bookmark-directory ((t (:inherit helm-ff-directory))))
  '(helm-buffer-directory ((t (:inherit helm-ff-directory))))
  '(org-modern-tag ((t (:inherit (secondary-selection org-modern-label) :background "yellow" :foreground "blue")))))
