@@ -18,7 +18,7 @@ $time\
 add_newline = true
 
 [character]
-error_symbol = '[‼️‼️](bold red)'
+error_symbol = '[‼️️](bold red)'
 
 [cmd_duration]
 min_time = 5000

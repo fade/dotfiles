@@ -1,4 +1,4 @@
-#+Startup: overview
+g#+Startup: overview
 #+TITLE: Emacs Configuration
 #+AUTHOR: Brian O'Reilly
 #+EMAIL: <fade@deepsky.com>
@@ -16,7 +16,7 @@
 #+end_src
 
 * Emacs Startup Profiler
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package esup
     :straight t
     ;; To use MELPA Stable use ":pin melpa-stable",
@@ -427,6 +427,7 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
   (keymap-set global-map "C-q" prefix-command-q)
 
 #+end_src
+
 
 * Org mode
 
@@ -1105,38 +1106,61 @@ Taken, with thanks, from [[https://github.com/dakrone/eos/blob/master/eos-web.or
                treesit-parser-manager-remove-grammar)
     :custom
     (treesit-parser-manager-grammars
-     '(("https://github.com/tree-sitter/tree-sitter-rust"
+     '(("https://github.com/tree-sitter-grammars/tree-sitter-rust"
         ("tree-sitter-rust"))
 
        ("https://github.com/ikatyang/tree-sitter-toml"
         ("tree-sitter-toml"))
 
-       ("https://github.com/elixir-lang/tree-sitter-elixir"
-        ("tree-sitter-elixir"))
-
-       ("https://github.com/tree-sitter/tree-sitter-typescript"
+       ("https://github.com/tree-sitter-grammars/tree-sitter-typescript"
         ("tree-sitter-typescript/tsx" "tree-sitter-typescript/typescript"))
 
-       ("https://github.com/tree-sitter/tree-sitter-javascript"
+       ("https://github.com/tree-sitter-grammars/tree-sitter-javascript"
         ("tree-sitter-javascript"))
 
-       ("https://github.com/tree-sitter/tree-sitter-css"
+       ("https://github.com/tree-sitter-grammars/tree-sitter-css"
         ("tree-sitter-css"))
 
        ("https://github.com/serenadeai/tree-sitter-scss"
         ("tree-sitter-scss"))
 
-       ("https://github.com/tree-sitter/tree-sitter-json"
+       ("https://github.com/tree-sitter-grammars/tree-sitter-json"
         ("tree-sitter-json"))
 
-       ("https://github.com/tree-sitter/tree-sitter-go"
+       ("https://github.com/tree-sitter-grammars/tree-sitter-go"
         ("tree-sitter-go"))
 
-       ("https://github.com/tree-sitter/tree-sitter-cpp"
+       ("https://github.com/tree-sitter-grammars/tree-sitter-cpp"
         ("tree-sitter-cpp"))
 
-       ("https://github.com/tree-sitter/tree-sitter-c"
-        (tree-sitter-c))))
+       ;; ("https://github.com/tree-sitter-grammars/tree-sitter-c"
+       ;;  ("tree-sitter-c"))
+
+       ;; ("https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+       ;;  ("tree-sitter-markdown"))
+
+       ("https://github.com/tree-sitter-grammars/tree-sitter-lua"
+        ("tree-sitter-lua"))
+
+       ("https://github.com/tree-sitter-grammars/tree-sitter-make"
+        ("tree-sitter-make"))
+
+       ("https://github.com/tree-sitter-grammars/tree-sitter-yaml"
+        ("tree-sitter-yaml"))
+
+       ("https://github.com/tree-sitter-grammars/tree-sitter-haskell"
+        ("tree-sitter-haskell"))
+
+       ("https://github.com/tree-sitter-grammars/tree-sitter-diff"
+        ("tree-sitter-diff"))
+
+       ("https://github.com/tree-sitter-grammars/tree-sitter-ssh-config"
+        ("tree-sitter-ssh-config"))
+
+       ;; ("https://github.com/tree-sitter-grammars/tree-sitter-commonlisp"
+       ;;  ("tree-sitter-commonlisp"))
+
+       ))
 
     :config
     (setq treesit-extra-load-path (list (expand-file-name "tree-sit" user-emacs-directory)))
@@ -1928,7 +1952,7 @@ increasingly obvious that the young'uns won't be brought to IRC.
       (require 'sly-autoloads)
       (add-to-list 'load-path "~/SourceCode/lisp/emacs_stuff/sly-stepper")
       (require 'sly-stepper-autoloads)
-      (load "~/quicklisp/log4sly-setup.el")
+      (load (expand-file-name "~/SourceCode/lisp/log4cl/elisp/log4sly.el"))
       (global-log4sly-mode 1)))
 
     (eval-after-load 'sly
@@ -2295,14 +2319,14 @@ lot cooler than you may think.
     ;; on the terminal, the theme situation needs more attention.
     (message "Loading DeepSky theme... ")
     ;; (load-theme 'deepsky-modus-fade t)
-    ;; (require 'deepsky-moonunit-theme)
-    (load-theme 'deepsky-moonunit t)
+    (require 'deepsky-moonunit-theme)
+    (load-theme 'deepsky-moonunit t nil)
     (message "Configuring mode-line appearance...")
     (set-face-attribute `mode-line nil
                         :box nil)
-    ;; (message "Setting cursor colour...")
-    ;;(set-cursor-color "yellow")
-    )
+    (blink-cursor-mode 1)
+    (setf blink-cursor-blinks -1)
+    (set-cursor-color "yellow"))
 
 #+END_SRC
 
@@ -2574,12 +2598,15 @@ This is the way we do in buffer completion. Problem solved.
   ;; still doesn't fix it (within screen), so if you want to use this
   ;; config on a terminal, you might want to revisit the choice of corfu
   ;; entirely.
+  ;; (when (and (not (display-graphic-p))
+  ;;            (not (version< emacs-version "31"))) 
+  ;;   (use-package corfu-terminal
+  ;;     :straight t
+  ;;     :vc (:url
+  ;;          "https://codeberg.org/akib/emacs-corfu-terminal.git"
+  ;;          :branch "master")
+  ;;     :config
+  ;;     (corfu-terminal-mode +1)))
 
-  (use-package corfu-terminal
-    :straight t ;; (:type git :host codeberg "akib/emacs-corfu-terminal.git")
-    :after corfu
-    :config
-    (unless (display-graphic-p)
-      (corfu-terminal-mode +1)))
 
 #+end_src
