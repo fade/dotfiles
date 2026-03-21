@@ -1,4 +1,4 @@
-g#+Startup: overview
+#+Startup: overview
 #+TITLE: Emacs Configuration
 #+AUTHOR: Brian O'Reilly
 #+EMAIL: <fade@deepsky.com>
@@ -6,10 +6,9 @@ g#+Startup: overview
 #+ATTR_HTML: :style margin-left: auto; margin-right: auto;
 
 #+begin_src emacs-lisp
-  ;;;  -*- lexical-binding: t; -*-
-  ;;; config.el ---  DeepSky emacs config file
-  ;;; Commentary: free code, clear conscience.
-  ;;; Copyright (c) 2018-2025 Brian O'Reilly <fade@deepsky.com>
+  ;;;  config.el ---  DeepSky emacs config file  -*- lexical-binding: t; -*-
+  ;;; Commentary: free code, clear conscience. GPLv3
+  ;;; Copyright ©️ 2018-2025 Brian O'Reilly <fade@deepsky.com>
 
   ;;; Code:
 
@@ -428,6 +427,79 @@ Overflow, here: [[https://stackoverflow.com/questions/1110118/in-emacs-dired-how
 
 #+end_src
 
+* Theme
+** Emacs' startup screen is naf
+#+BEGIN_SRC emacs-lisp
+(setq inhibit-startup-message t)
+#+END_SRC
+** Colours On Terminal
+   custom colour themes generally enhance my experience of writing
+   inside emacs, but when that theme is applied to an instance running
+   inside a terminal, the effect is really just terrible. This mode
+   kind of approximates the effect of a graphical emacs frame, in a
+   text console.
+   
+#+BEGIN_SRC emacs-lisp
+  (use-package color-theme-approximate
+    :straight t
+    :config
+    (unless (display-graphic-p)
+      (autoload 'color-theme-approximate-on "color-theme-approximate")
+      (color-theme-approximate-on)))
+
+  (use-package ef-themes
+    :straight t)
+#+END_SRC
+
+** Doom Themes, sometimes
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :straight t)
+#+end_src
+
+** DeepSky Theme
+
+   Load the appropriate theme, and a utility for arbitrarily loading
+   others.
+
+#+BEGIN_SRC emacs-lisp
+
+  (progn
+    ;; on the terminal, the theme situation needs more attention.
+    (message "Loading DeepSky theme... ")
+    ;; (load-theme 'deepsky-modus-fade t)
+    (require 'deepsky-moonunit-theme)
+    (load-theme 'deepsky-moonunit t nil)
+    (message "Configuring mode-line appearance...")
+    (set-face-attribute `mode-line nil
+                        :box nil)
+    (blink-cursor-mode 1)
+    (setf blink-cursor-blinks -1)
+    (set-cursor-color "yellow"))
+
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (defun switch-theme (theme)
+    "Disables any currently active themes and loads THEME."
+    ;; This interactive call is taken from `load-theme'
+    (interactive
+     (list
+      (intern (completing-read "Load custom theme: "
+                               (mapc 'symbol-name
+                                     (custom-available-themes))))))
+    (let ((enabled-themes custom-enabled-themes))
+      (mapc #'disable-theme custom-enabled-themes)
+      (load-theme theme t)))
+
+  (defun disable-active-themes ()
+    "Disables any currently active themes listed in `custom-enabled-themes'."
+    (interactive)
+    (mapc #'disable-theme custom-enabled-themes))
+
+  (bind-key "s-<f10>" 'switch-theme)
+  (bind-key "s-<f11>" 'disable-active-themes)
+#+END_SRC
 
 * Org mode
 
@@ -648,29 +720,44 @@ file if you change this list.
     :straight t
     :init
     (setq org-roam-v2-ack t)
+    :custom
+    (org-web-tools-pandoc-sleep-time 2.0)
+    (org-roam-directory (expand-file-name "Roam/" site-org-files))
+    (org-roam-dailies-directory (expand-file-name "Dailies/" org-roam-directory))
     :config
-    (setf org-web-tools-pandoc-sleep-time 2.0)
-    (setf org-roam-directory (expand-file-name "Roam/" site-org-files))
-    (setf org-roam-dailies-directory (expand-file-name "Dailies/" org-roam-directory))
+    ;; (setf org-web-tools-pandoc-sleep-time 2.0)
+    ;; (setf org-roam-directory (expand-file-name "Roam/" site-org-files))
+    ;; (setf org-roam-dailies-directory (expand-file-name "Dailies/" org-roam-directory))
 
     ;; New capture template
     (setq org-roam-dailies-capture-templates
-          '(("d" "daily" entry #'org-roam-capture--get-point
-             "* %?\n")))
+          '(;; ("d" "daily" entry #'org-roam-capture--get-point
+            ;;  "* %?\n")
+            ("d" "default" entry "* %<%I:%M %p>: %?"
+             :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n"))))
 
     (org-roam-setup)
 
     :bind
-    (("C-c n l" . org-roam-buffer-toggle)
-     ("C-c n f" . org-roam-node-find)
-     ("C-c n g" . org-roam-graph)
-     ("C-c n r" . org-roam-node-random)
-     (:map org-mode-map
-           ("C-c n i" . org-roam-node-insert)
-           ("C-c n o" . org-roam-get-create)
-           ("C-c n t" . org-roam-tag-add)
-           ("C-c n a" . org-roam-alias-add)
-           ("C-c n l" . org-roam-buffer-toggle))))
+    ("C-c n l" . org-roam-buffer-toggle)
+    ("C-c n f" . org-roam-node-find)
+    ("C-c n g" . org-roam-graph)
+    ("C-c n r" . org-roam-node-random)
+    (:map org-mode-map
+          ("C-c n i" . org-roam-node-insert)
+          ("C-c n o" . org-roam-get-create)
+          ("C-c n t" . org-roam-tag-add)
+          ("C-c n a" . org-roam-alias-add)
+          ("C-c n l" . org-roam-buffer-toggle)
+          :map org-mode-map
+          ("C-M-i" . completion-at-point-functions)
+          :map org-roam-dailies-map
+          ("Y" . org-roam-dailies-capture-yesterday)
+          ("T" . org-roam-dailies-capture-tomorrow))
+    :bind-keymap ("C-c n d" . org-roam-dailies-map)
+
+    :config (require 'org-roam-dailies)
+    (org-roam-db-autosync-mode))
 
   (use-package  org-roam-bibtex
     :straight t
@@ -968,7 +1055,6 @@ exporting to html sometimes (always?) requires htmlize
 (use-package htmlize
   :straight t)
 #+END_SRC
-
 
 * Dotfiles
 I had hopes for this, but it doesn't work.
@@ -1910,7 +1996,7 @@ increasingly obvious that the young'uns won't be brought to IRC.
       (if (eql system-type 'gnu/linux)
           (setf sly-lisp-implementations
                 '(;; (sbcl ("sbcl" "--core" "/home/fade/sbcl.core")) ;;"--dynamic-space-size" "8GB"
-                  (sbcl ("sbcl" "--dynamic-space-size" "2500"))
+                  (sbcl ("sbcl" "--dynamic-space-size" "4GB"))
                   (sbcl-vanilla ("/usr/local/bin/sbcl" "--dynamic-space-size" "2500"))
                   (ccl ("/usr/bin/ros" "-L" "ccl-bin" "run"))
                   (abcl ("/usr/local/src/abcl/abcl"))
@@ -1952,6 +2038,7 @@ increasingly obvious that the young'uns won't be brought to IRC.
       (require 'sly-autoloads)
       (add-to-list 'load-path "~/SourceCode/lisp/emacs_stuff/sly-stepper")
       (require 'sly-stepper-autoloads)
+      (add-to-list 'load-path (expand-file-name "~/SourceCode/lisp/log4cl/elisp"))
       (load (expand-file-name "~/SourceCode/lisp/log4cl/elisp/log4sly.el"))
       (global-log4sly-mode 1)))
 
@@ -2278,80 +2365,6 @@ lot cooler than you may think.
     (add-hook 'prog-mode-hook 'rainbow-mode))
 #+END_SRC
 
-* Theme
-** Emacs' startup screen is naf
-#+BEGIN_SRC emacs-lisp
-(setq inhibit-startup-message t)
-#+END_SRC
-** Colours On Terminal
-   custom colour themes generally enhance my experience of writing
-   inside emacs, but when that theme is applied to an instance running
-   inside a terminal, the effect is really just terrible. This mode
-   kind of approximates the effect of a graphical emacs frame, in a
-   text console.
-   
-#+BEGIN_SRC emacs-lisp
-  (use-package color-theme-approximate
-    :straight t
-    :config
-    (unless (display-graphic-p)
-      (autoload 'color-theme-approximate-on "color-theme-approximate")
-      (color-theme-approximate-on)))
-
-  (use-package ef-themes
-    :straight t)
-#+END_SRC
-
-** Doom Themes, sometimes
-#+begin_src emacs-lisp
-  (use-package doom-themes
-    :straight t)
-#+end_src
-
-** DeepSky Theme
-
-   Load the appropriate theme, and a utility for arbitrarily loading
-   others.
-
-#+BEGIN_SRC emacs-lisp
-
-  (progn
-    ;; on the terminal, the theme situation needs more attention.
-    (message "Loading DeepSky theme... ")
-    ;; (load-theme 'deepsky-modus-fade t)
-    (require 'deepsky-moonunit-theme)
-    (load-theme 'deepsky-moonunit t nil)
-    (message "Configuring mode-line appearance...")
-    (set-face-attribute `mode-line nil
-                        :box nil)
-    (blink-cursor-mode 1)
-    (setf blink-cursor-blinks -1)
-    (set-cursor-color "yellow"))
-
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (defun switch-theme (theme)
-    "Disables any currently active themes and loads THEME."
-    ;; This interactive call is taken from `load-theme'
-    (interactive
-     (list
-      (intern (completing-read "Load custom theme: "
-                               (mapc 'symbol-name
-                                     (custom-available-themes))))))
-    (let ((enabled-themes custom-enabled-themes))
-      (mapc #'disable-theme custom-enabled-themes)
-      (load-theme theme t)))
-
-  (defun disable-active-themes ()
-    "Disables any currently active themes listed in `custom-enabled-themes'."
-    (interactive)
-    (mapc #'disable-theme custom-enabled-themes))
-
-  (bind-key "s-<f10>" 'switch-theme)
-  (bind-key "s-<f11>" 'disable-active-themes)
-#+END_SRC
-
 * Misc
 ** Display Time
 
@@ -2415,8 +2428,8 @@ And here's how we tell Emacs which font we want. See [[https://protesilaos.com/e
       (progn
         (add-to-list 'default-frame-alist '(font . "EnvyCodeR Nerd Font"))
         ;; (set-face-attribute 'variable-pitch nil :font "Iosevka Comfy Duo" :height 120 :weight 'regular)
-        (set-face-attribute 'default nil :font "EnvyCodeR Nerd Font" :height 120)
-        (set-face-attribute 'fixed-pitch nil :font "EnvyCodeR Nerd Font-11")
+        (set-face-attribute 'default nil :font "EnvyCodeR Nerd Font" :height 100)
+        (set-face-attribute 'fixed-pitch nil :font "EnvyCodeR Nerd Font-10")
 
         (use-package fontaine
           :straight t
@@ -2460,8 +2473,35 @@ And here's how we tell Emacs which font we want. See [[https://protesilaos.com/e
                    :italic-family "EnvyCodeR Nerd Font"
                    :italic-slant italic
                    :line-spacing nil)))
+          
           (fontaine-set-preset 'regular)
-          (fontaine-mode 1))))
+
+          ;; (with-eval-after-load 'fontaine
+          ;;   (fontaine-add-preset 'custom-comments-italic
+          ;;                        '(:font-lock-comment-face (:slant italic))))
+
+          (fontaine-mode 1)
+
+          ;;; fontaine is implemented as a theme now, so we need to
+          ;;; ensure it is applied when themes change.
+          ;;; emacs-version >= 29
+          (add-hook 'enable-theme-functions #'fontaine-apply-current-preset)
+
+          ;;; emacs-version < 29
+          ;; Set up the `after-enable-theme-hook'
+          ;; (defvar after-enable-theme-hook nil
+          ;;   "Normal hook run after enabling a theme.")
+
+          ;; (defun run-after-enable-theme-hook (&rest _args)
+          ;;   "Run `after-enable-theme-hook'."
+          ;;   (run-hooks 'after-enable-theme-hook))
+
+          ;; (advice-add 'enable-theme :after #'run-after-enable-theme-hook)
+
+          ;; (add-hook 'after-enable-theme-hook #'fontaine-apply-current-preset)
+
+          )))
+
 #+END_SRC
 
 
@@ -2578,26 +2618,28 @@ And here's how we tell Emacs which font we want. See [[https://protesilaos.com/e
 * Corfu
 This is the way we do in buffer completion. Problem solved.
 #+begin_src emacs-lisp
-  (use-package corfu
-    :straight t
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    (corfu-scroll-margin 5)
-    (corfu-separator ?\s)
-    :bind (:map corfu-map
-                (("C-n" . corfu-next)
-                 ("C-p" . corfu-previous)
-                 ("<tab>" . corfu-next)
-                 ("<backtab>" . corfu-previous)))
-    ;; :config
-    ;; (global-corfu-mode)
-    :hook (after-init . global-corfu-mode))
+  (when (display-graphic-p)
+    (use-package corfu
+      :straight t
+      :custom
+      (corfu-cycle t)
+      (corfu-auto t)
+      (corfu-scroll-margin 5)
+      (corfu-separator ?\s)
+      :bind (:map corfu-map
+                  (("C-n" . corfu-next)
+                   ("C-p" . corfu-previous)
+                   ("<tab>" . corfu-next)
+                   ("<backtab>" . corfu-previous)))
+      ;; :config
+      ;; (global-corfu-mode)
+      :hook (after-init . global-corfu-mode)))
 
   ;; corfu popup frames have some issues on terminal sessions. this
   ;; still doesn't fix it (within screen), so if you want to use this
   ;; config on a terminal, you might want to revisit the choice of corfu
   ;; entirely.
+
   ;; (when (and (not (display-graphic-p))
   ;;            (not (version< emacs-version "31"))) 
   ;;   (use-package corfu-terminal

@@ -193,7 +193,7 @@ alias lisp='cd $src/lisp/'
 # }
 
 purify (){
-    rm -rf ~/.cache/common-lisp/* && rm -rf ~/.slime/fasl/*
+    rm -rf ~/.cache/common-lisp/*
 }
 
 ex () {
