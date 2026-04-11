@@ -185,9 +185,13 @@ alias ssn="sudo shutdown now"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-# Stuff local to me specifically.
-
-source $HOME/system_scripts/fade.zshrc
+# Per-user shell overlay. Drop "$HOME/system_scripts/zshrc.d/${USER}.zshrc"
+# to add your own aliases, env vars, and functions on top of this file.
+# Missing file is a silent no-op so a new account gets a functional shell
+# from dot_zshrc alone.
+if [ -r "$HOME/system_scripts/zshrc.d/${USER}.zshrc" ]; then
+    source "$HOME/system_scripts/zshrc.d/${USER}.zshrc"
+fi
 
 # it really is annoying editing files as root in vi where my muscle
 # memory gives the editor paroxysms of anxiety as I throw C-g at it
