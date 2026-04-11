@@ -1,6 +1,7 @@
+{{- $archFamily := or (eq .chezmoi.osRelease.id "arch") (eq .chezmoi.osRelease.id "cachyos") (eq .chezmoi.osRelease.id "manjaro") (eq .chezmoi.osRelease.id "endeavouros") (eq .chezmoi.osRelease.id "arcolinux") -}}
 # -*- mode: Shell; -*-
 
-clear && fastfetch 
+clear && fastfetch
 
 # Path to your oh-my-zsh installation.
 # export ZSH="$HOME/.oh-my-zsh"
@@ -52,9 +53,10 @@ fi
 ##Cmatrix thing
 alias matrix='cmatrix -s -C cyan'
 
+{{ if $archFamily -}}
 #iso and version used to install ArcoLinux
 alias iso="cat /etc/dev-rel | awk -F '=' '/ISO/ {print $2}'"
-
+{{ end }}
 #systeminfo
 alias probe="sudo -E hw-probe -all -upload"
 
@@ -65,8 +67,10 @@ alias lll='eza -l --color=always --group-directories-first --icons'  # long form
 alias llt='eza -aT --color=always --group-directories-first --icons' # tree listing
 alias ll='eza -lah --color=always --group-directories-first --icons' # tree listing
 
+{{ if $archFamily -}}
 #pacman unlock
 alias unlock="sudo rm /var/lib/pacman/db.lck"
+{{- end }}
 
 #available free memory
 alias free="free -mt"
@@ -80,6 +84,7 @@ alias df='df -h'
 #userlist
 alias userlist="cut -d: -f1 /etc/passwd"
 
+{{ if $archFamily -}}
 #Pacman for software managment
 alias search='sudo pacman -Qs'
 alias remove='sudo pacman -R'
@@ -95,6 +100,7 @@ alias pget='paru -S '
 alias prm='paru -Rs '
 alias psr='paru -Ss '
 alias upall='paru -Syyu --noconfirm'
+{{- end }}
 
 #Flatpak Update
 alias fpup='flatpak update'
@@ -105,9 +111,11 @@ alias sup='sudo snap refresh'
 #grub update
 alias grubup='sudo grub-mkconfig -o /boot/grub/grub.cfg'
 
+{{ if $archFamily -}}
 #get fastest mirrors in your neighborhood
 alias ram='sudo rate-mirrors --allow-root arch | sudo tee /etc/pacman.d/mirrorlist'
 alias reft='sudo systemctl enable reflector.service reflector.timer && sudo systemctl start reflector.service reflector.timer'
+{{- end }}
 
 #quickly kill stuff
 alias kc='killall conky'
@@ -160,6 +168,7 @@ alias docs='cd ~/Documents'
 alias sapps='cd /usr/share/applications'
 alias lapps='cd ~/.local/share/applications'
 
+{{ if $archFamily -}}
 #switch between lightdm and sddm
 alias tolightdm="sudo pacman -S lightdm lightdm-gtk-greeter lightdm-gtk-greeter-settings --noconfirm --needed ; sudo systemctl enable lightdm.service -f ; echo 'Lightm is active - reboot now'"
 alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable sddm.service -f ; echo 'Sddm is active - reboot now'"
@@ -167,6 +176,7 @@ alias tosddm="sudo pacman -S sddm --noconfirm --needed ; sudo systemctl enable s
 #Recent Installed Packages
 alias rip="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -200 | nl"
 alias riplong="expac --timefmt='%Y-%m-%d %T' '%l\t%n %v' | sort | tail -3000 | nl"
+{{- end }}
 
 #shutdown or reboot
 alias sr="sudo reboot"
@@ -197,9 +207,11 @@ remanifest() {
 # opam configuration
 test -r /home/$USER/.opam/opam-init/init.zsh && . /home/$USER/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 # eval "$(direnv hook bash)"
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/.local/lib/mojo
-export PATH=$PATH:~/.modular/pkg/packages.modular.com_mojo/bin/:/home/fade/.cargo/bin/
-export LD_LIBRARY_PATH=/home/fade/.local/lib/arch-mojo:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/.local/lib/mojo
+export PATH=$PATH:$HOME/.modular/pkg/packages.modular.com_mojo/bin/:$HOME/.cargo/bin/
+{{ if $archFamily -}}
+export LD_LIBRARY_PATH=$HOME/.local/lib/arch-mojo:$LD_LIBRARY_PATH
+{{- end }}
 
 export VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT=1
 

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+target="{{ .chezmoi.homeDir }}/system_scripts"
+repo="git@github.com:fade/system_scripts.git"
+repo_https="https://github.com/fade/system_scripts.git"
+
+if [ -d "$target/.git" ]; then
+    exit 0
+fi
+
+if [ -e "$target" ] && [ ! -d "$target" ]; then
+    echo "run_once: $target exists and is not a directory; aborting" >&2
+    exit 1
+fi
+
+if [ -d "$target" ] && [ -n "$(ls -A "$target" 2>/dev/null || true)" ]; then
+    echo "run_once: $target exists and is non-empty but not a git repo; aborting" >&2
+    exit 1
+fi
+
+if git ls-remote "$repo" >/dev/null 2>&1; then
+    git clone --recurse-submodules "$repo" "$target"
+else
+    git clone --recurse-submodules "$repo_https" "$target"
+fi

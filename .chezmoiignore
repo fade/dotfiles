@@ -1,0 +1,5 @@
+{{- $archFamily := or (eq .chezmoi.osRelease.id "arch") (eq .chezmoi.osRelease.id "cachyos") (eq .chezmoi.osRelease.id "manjaro") (eq .chezmoi.osRelease.id "endeavouros") (eq .chezmoi.osRelease.id "arcolinux") -}}
+{{ if not $archFamily }}
+.config/pacmanfile
+.config/pacmanfile/**
+{{ end }}
