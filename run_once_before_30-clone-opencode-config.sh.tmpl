@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+target="{{ .chezmoi.homeDir }}/.config/opencode"
+repo="git@github.com:fade/dsmr-opencode-config.git"
+repo_https="https://github.com/fade/dsmr-opencode-config.git"
+
+if [ -d "$target/.git" ]; then
+    exit 0
+fi
+
+if [ -e "$target" ] && [ ! -d "$target" ]; then
+    echo "run_once: $target exists and is not a directory; aborting" >&2
+    exit 1
+fi
+
+if [ -d "$target" ] && [ -n "$(ls -A "$target" 2>/dev/null || true)" ]; then
+    echo "run_once: $target exists and is non-empty but not a git repo; aborting" >&2
+    exit 1
+fi
+
+mkdir -p "$(dirname "$target")"
+
+if git ls-remote "$repo" >/dev/null 2>&1; then
+    git clone "$repo" "$target"
+else
+    git clone "$repo_https" "$target"
+fi

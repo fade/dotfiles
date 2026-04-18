@@ -185,6 +185,14 @@ alias ssn="sudo shutdown now"
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# OpenCode AI development environment (shared stack, cloned by
+# run_once_before_30-clone-opencode-config). The per-user overlay
+# below can still override any of these exports.
+if [ -r "$HOME/.config/opencode/config/env-vars.sh" ]; then
+    export OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
+    source "$OPENCODE_CONFIG_DIR/config/env-vars.sh"
+fi
+
 # Per-user shell overlay. Drop "$HOME/system_scripts/zshrc.d/${USER}.zshrc"
 # to add your own aliases, env vars, and functions on top of this file.
 # Missing file is a silent no-op so a new account gets a functional shell
@@ -218,5 +226,13 @@ export LD_LIBRARY_PATH=$HOME/.local/lib/arch-mojo:$LD_LIBRARY_PATH
 {{- end }}
 
 export VAGRANT_DISABLE_STRICT_DEPENDENCY_ENFORCEMENT=1
+
+# OpenCode binary (installed separately via the upstream opencode
+# installer, typically under $HOME/.opencode/bin). The directory is
+# only present on machines that have run that installer; guard so
+# fresh accounts don't get a dead PATH entry.
+if [ -d "$HOME/.opencode/bin" ]; then
+    export PATH="$HOME/.opencode/bin:$PATH"
+fi
 
 eval "$(direnv hook zsh)"
