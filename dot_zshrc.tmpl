@@ -1,7 +1,10 @@
 {{- $archFamily := or (eq .chezmoi.osRelease.id "arch") (eq .chezmoi.osRelease.id "cachyos") (eq .chezmoi.osRelease.id "manjaro") (eq .chezmoi.osRelease.id "endeavouros") (eq .chezmoi.osRelease.id "arcolinux") -}}
-# -*- mode: Shell; -*-
+#!/usr/bin/env zsh # -*- mode: Shell; -*-
 
-clear && fastfetch
+clear
+if (( $+commands[fastfetch] )); then
+    fastfetch
+fi
 
 # Path to your oh-my-zsh installation.
 # export ZSH="$HOME/.oh-my-zsh"
