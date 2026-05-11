@@ -1,0 +1,4 @@
+# eval "$(ssh-agent -s)"
+eval `keychain --eval --agents ssh id_rsa id_ed25519`
+
+eval "$(direnv hook zsh)"
