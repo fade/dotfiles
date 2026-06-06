@@ -6,6 +6,13 @@
 (use-package :ql)
 (quickload '(bordeaux-threads slynk))
 
+(let ((dist (ql-dist:find-dist "quicklisp"))
+      (shir (ql-dist:find-dist "shirakumo"))
+      (ultr (ql-dist:find-dist "ultralisp")))
+  (setf (ql-dist:preference dist) 100
+        (ql-dist:preference shir) 95
+        (ql-dist:preference ultr) 90))
+
 ;; /quicklisp
 
 ;;===============================================================================
@@ -162,6 +169,15 @@
 ;;         (setf slynk:*use-dedicated-output-stream* nil))
 ;;     (error "Slynk is not loaded in this image")))
 
+
+;; resuming while debuging eve-quant is a PITA. Little function to do it.
+;; (defmacro resume-eve-quant ()
+;;   `(progn
+;;      (in-package :cl-user)
+;;      (ql:quickload :eve-quant)
+;;      (eve-quant.config:set-config t :slynk :enabled)
+;;      (eve-quant:start-eve-quant :interface :terminal)))
+
 (defun heron-area-triangle (a b d)
   "Calculate the area of a triangle whose sides are of known length.
 In geometry, Heron's formula (or Hero's formula) gives the area of a
@@ -180,4 +196,30 @@ is the semiperimeter of the triangle, the area A is,
 
 ;; for common lisp options nuker.
 (sb-posix:setenv "CC" "gcc" 1)
+
+;;===============================================================================
+;; alive-lsp: Common Lisp Language Server (LSP-01, LSP-06)
+;; Start alive-lsp TCP server on port 8006 if not already running.
+;; lsp-mode's lsp-lisp-alive-start-ls also checks port availability from Emacs side;
+;; this provides the persistent server for sessions where SBCL runs first.
+;;
+;; Guard strategy: attempt quickload+start inside handler-case.
+;; If alive-lsp is already listening, alive/server::start signals an error
+;; (address already in use) which is caught and silently ignored.
+;; usocket is NOT called before quickload (it is an alive-lsp dep, not pre-loaded).
+;;
+;; Note: alive/server::start is called via (intern "START" "ALIVE/SERVER") to avoid
+;; a READ-time package-does-not-exist error — the package only exists after quickload.
+;;===============================================================================
+;; (handler-case
+;;     (progn
+;;       (ql:quickload "alive-lsp" :silent t)
+;;       ;; Use intern to call alive/server::start — avoids READ error before package exists.
+;;       ;; alive/server::start signals an error if port already bound.
+;;       ;; handler-case catches it so SBCL continues normally.
+;;       (funcall (intern "START" (find-package "ALIVE/SERVER")) :port 8006))
+;;   (error (e)
+;;     ;; Port already bound (server running) or dependency issue — not fatal.
+;;     (format *error-output* "~&; alive-lsp startup skipped: ~A~%" e)))
+;; /alive-lsp
 
