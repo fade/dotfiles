@@ -1,0 +1,8 @@
+#!/bin/sh
+# Rebuild the user font cache when the emoji fontconfig rule changes. The
+# scan-time charset edit in 05-prefer-color-emoji.conf only takes effect once
+# fontconfig re-scans, so a freshly applied rule needs a cache refresh to bite.
+# The hash below makes chezmoi re-run this script whenever that file changes.
+# rule hash: {{ include "dot_config/fontconfig/conf.d/05-prefer-color-emoji.conf" | sha256sum }}
+command -v fc-cache >/dev/null 2>&1 && fc-cache -f >/dev/null 2>&1
+exit 0
