@@ -1,4 +1,3 @@
-# eval "$(ssh-agent -s)"
-eval `keychain --eval --agents ssh id_rsa id_ed25519`
+# SSH agent and key loading are handled by the per-user zsh overlay, not here.
 
 eval "$(direnv hook zsh)"
