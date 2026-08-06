@@ -9,9 +9,9 @@
 (let ((dist (ql-dist:find-dist "quicklisp"))
       (shir (ql-dist:find-dist "shirakumo"))
       (ultr (ql-dist:find-dist "ultralisp")))
-  (setf (ql-dist:preference dist) 100
-        (ql-dist:preference shir) 95
-        (ql-dist:preference ultr) 90))
+  (when dist (setf (ql-dist:preference dist) 100))
+  (when shir (setf (ql-dist:preference shir) 95))
+  (when ultr (setf (ql-dist:preference ultr) 90)))
 
 ;; /quicklisp
 
