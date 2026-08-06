@@ -239,3 +239,12 @@ if [ -d "$HOME/.opencode/bin" ]; then
 fi
 
 eval "$(direnv hook zsh)"
+
+# Set the terminal/window title to the current directory's basename, so a
+# multi-pane / multi-tab setup can tell project shells apart at a glance.
+# Guarded against dumb terminals (the emacs/Claude Code shell branch above).
+if [[ "$TERM" != "dumb" ]]; then
+    autoload -Uz add-zsh-hook
+    _set_title() { printf '\033]0;%s\007' "${PWD:t}" }
+    add-zsh-hook precmd _set_title
+fi
