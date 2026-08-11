@@ -63,12 +63,22 @@ alias iso="cat /etc/dev-rel | awk -F '=' '/ISO/ {print $2}'"
 #systeminfo
 alias probe="sudo -E hw-probe -all -upload"
 
-# Replace ls with exa
-alias lls='eza -al --color=always --group-directories-first --icons' # preferred listing
-alias lla='eza -a --color=always --group-directories-first --icons'  # all files and dirs
-alias lll='eza -l --color=always --group-directories-first --icons'  # long format
-alias llt='eza -aT --color=always --group-directories-first --icons' # tree listing
-alias ll='eza -lah --color=always --group-directories-first --icons' # tree listing
+# Richer directory listings, when eza is installed. Guarded so a host that
+# has not got it yet keeps the system ls behind these names, rather than five
+# aliases that fail the moment you use them.
+if (( $+commands[eza] )); then
+    alias lls='eza -al --color=always --group-directories-first --icons' # preferred listing
+    alias lla='eza -a --color=always --group-directories-first --icons'  # all files and dirs
+    alias lll='eza -l --color=always --group-directories-first --icons'  # long format
+    alias llt='eza -aT --color=always --group-directories-first --icons' # tree listing
+    alias ll='eza -lah --color=always --group-directories-first --icons' # long, all, human sizes
+else
+    alias lls='ls -al'
+    alias lla='ls -a'
+    alias lll='ls -l'
+    alias llt='ls -R'
+    alias ll='ls -lah'
+fi
 
 {{ if $archFamily -}}
 #pacman unlock

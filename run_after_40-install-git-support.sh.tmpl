@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Put the files ~/.gitconfig points at into place.
+#
+# The settings dropped by dot_gitconfig.tmpl name a global excludes file, a
+# per-user ignore file, and an init template directory. Git reads all three
+# from disk and says nothing when they are absent, so a host that never runs
+# this looks configured while silently doing none of it. The contents live in
+# system_scripts, cloned by run_once_before_10.
+#
+# Runs on every apply because the installer is idempotent and the source can
+# change under it whenever system_scripts is pulled.
+set -euo pipefail
+
+installer="{{ .chezmoi.homeDir }}/system_scripts/git/install.sh"
+
+if [ -x "$installer" ]; then
+    "$installer"
+fi

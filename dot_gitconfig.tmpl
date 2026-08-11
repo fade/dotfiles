@@ -1,0 +1,40 @@
+# Per-user git configuration.
+#
+# Identity defaults to the repository owner's. Set gitName and gitEmail in
+# your chezmoi config to claim it for your own account:
+#
+#   # ~/.config/chezmoi/chezmoi.toml
+#   [data]
+#       gitName = "Your Name"
+#       gitEmail = "you@example.com"
+#       githubUser = "yourhandle"
+#
+# The three paths named below are put in place by
+# ~/system_scripts/git/install.sh, which a chezmoi apply runs for you. Until
+# it has run, git ignores all three quietly rather than failing.
+[user]
+	name = {{ default "Brian O'Reilly" (get . "gitName") }}
+	email = {{ default "fade@deepsky.com" (get . "gitEmail") }}
+[github]
+	user = {{ default "fade" (get . "githubUser") }}
+[init]
+	defaultBranch = main
+	templateDir = {{ .chezmoi.homeDir }}/.config/git/template
+[core]
+	autocrlf = input
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
+[pull]
+	rebase = true
+	ff = only
+[push]
+	autoSetupRemote = true
+[merge]
+	conflictStyle = diff3
+	ff = false
+[magit]
+	hideCampaign = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

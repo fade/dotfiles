@@ -1,0 +1,28 @@
+# -*- mode: sh; sh-shell: zsh -*-
+# Read by EVERY zsh, interactive or not, before any other startup file.
+#
+# That makes it the only place a variable can go if it has to reach a process
+# the shell spawns without a login: a language server or tool server started
+# by an editor, a hook invoked by git, a command run over ssh without a tty.
+# Those processes never read ~/.zshrc. Anything that only matters to a person
+# typing at a prompt belongs in ~/.zshrc instead, because everything here is
+# paid for on every script invocation.
+#
+# Keep it small and side-effect free: no output, no command substitution that
+# can block, nothing that assumes a terminal exists.
+
+# Where git worktrees are created and destroyed on the fly. It sits outside
+# the ASDF source-registry tree deliberately, so a worktree is never picked up
+# by accident and a build can never resolve to one without being told to. It
+# is named here because several tools have to agree on the location, and
+# spelling the path into each of them by hand is how they drifted apart.
+export LISP_SCRATCHSPACE="$HOME/SourceCode/lisp-scratch/"
+
+# Per-user environment overlay, the non-interactive counterpart of the
+# ${USER}.zshrc hook in ~/.zshrc. Drop
+# "$HOME/system_scripts/zshrc.d/${USER}.zshenv" to add your own variables for
+# tools that run outside a login shell. A missing file is a silent no-op, so a
+# fresh account gets a working environment from this file alone.
+if [ -r "$HOME/system_scripts/zshrc.d/${USER}.zshenv" ]; then
+    source "$HOME/system_scripts/zshrc.d/${USER}.zshenv"
+fi
