@@ -1,0 +1,8 @@
+{{- $saslUser := promptStringOnce . "irssi.saslUsername" "libera SASL username (blank to skip SASL)" "Fade" -}}
+{{- $saslPass := promptStringOnce . "irssi.saslPassword" "libera SASL password (blank to skip SASL)" "" -}}
+{{- $srhKey   := promptStringOnce . "irssi.srhChannelKey" "SRHNet channel key (blank if none)" "" -}}
+
+[data.irssi]
+    saslUsername = {{ $saslUser | quote }}
+    saslPassword = {{ $saslPass | quote }}
+    srhChannelKey = {{ $srhKey | quote }}

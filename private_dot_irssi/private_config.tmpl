@@ -1,0 +1,95 @@
+{{- $saslUsername := dig "irssi" "saslUsername" "" . -}}
+{{- $saslPassword := dig "irssi" "saslPassword" "" . -}}
+{{- $srhChannelKey := dig "irssi" "srhChannelKey" "" . -}}
+settings = {
+  core = {
+    real_name = "Buster McFadden";
+    user_name = "Fade";
+    nick = "Fade";
+  };
+  "fe-common/core" = { theme = "screwer-redux"; };
+};
+
+servers = (
+  {
+    address = "irc.libera.chat";
+    chatnet = "libera";
+    port = "6667";
+    use_tls = "no";
+    tls_verify = "no";
+    autoconnect = "yes";
+    starttls = "yes";
+  },
+  {
+    address = "irc.whine.com";
+    chatnet = "SRHNet";
+    port = "6667";
+    use_tls = "no";
+    tls_verify = "no";
+    autoconnect = "yes";
+    starttls = "yes";
+  },
+  {
+    address = "colonq.computer";
+    chatnet = "Clonquistes";
+    port = "26697";
+    use_tls = "yes";
+    autoconnect = "yes";
+  }
+);
+
+chatnets = {
+  SRHNet = {
+    type = "IRC";
+    max_kicks = "5";
+    max_modes = "5";
+    max_msgs = "15";
+    max_whois = "4";
+  };
+  libera = {
+    type = "IRC";
+{{- if $saslPassword }}
+    sasl_mechanism = "PLAIN";
+    sasl_username = {{ $saslUsername | quote }};
+    sasl_password = {{ $saslPassword | quote }};
+{{- end }}
+    max_kicks = "5";
+    max_modes = "5";
+    max_msgs = "15";
+    max_whois = "4";
+  };
+  Clonquistes = {
+    type = "IRC";
+    max_kicks = "5";
+    max_modes = "5";
+    max_msgs = "15";
+    max_whois = "4";
+  };
+};
+
+channels = (
+  { name = "#deepsky"; chatnet = "SRHNet"; autojoin = "yes";{{ if $srhChannelKey }} password = {{ $srhChannelKey | quote }};{{ end }} },
+  { name = "#walled"; chatnet = "SRHNet"; autojoin = "yes"; },
+  { name = "#archive"; chatnet = "SRHNet"; autojoin = "yes"; },
+  { name = "#funkrehab"; chatnet = "SRHNet"; autojoin = "yes";{{ if $srhChannelKey }} password = {{ $srhChannelKey | quote }};{{ end }} },
+  { name = "#trinity"; chatnet = "SRHNet"; autojoin = "yes"; },
+  { name = "#srh"; chatnet = "SRHNet"; autojoin = "yes"; },
+
+  { name = "#deepsky"; chatnet = "libera"; autojoin = "yes"; },
+  { name = "#commonlisp"; chatnet = "libera"; autojoin = "yes"; },
+  { name = "#systemcrafters"; chatnet = "libera"; autojoin = "yes"; },
+  { name = "#systemcrafters-live"; chatnet = "libera"; autojoin = "yes"; },
+  { name = "#asteroid.music"; chatnet = "libera"; autojoin = "yes"; },
+  { name = "#clatter"; chatnet = "libera"; autojoin = "yes"; },
+  { name = "#shirakumo"; chatnet = "libera"; autojoin = "yes"; },
+  { name = "##lesbianbondagedungeon"; chatnet = "libera"; autojoin = "yes"; },
+
+  { name = "#cyberspace"; chatnet = "Clonquistes"; autojoin = "yes"; }
+  # { name = "#busted"; chatnet = "SRHNet"; autojoin = "yes"; },
+);
+
+ignores = ( { level = "JOINS PARTS QUITS NICKS"; } );
+
+aliases = {
+  logsb = "eval lastlog -file ~/irclogs/${tag}/${C}.${F}_${Z}.scrollback.log";
+};
