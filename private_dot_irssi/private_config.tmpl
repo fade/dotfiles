@@ -1,6 +1,10 @@
 {{- $saslUsername := dig "irssi" "saslUsername" "" . -}}
 {{- $saslPassword := dig "irssi" "saslPassword" "" . -}}
 {{- $srhChannelKey := dig "irssi" "srhChannelKey" "" . -}}
+# Two annotations appear in this file:
+#   DISABLED: I turned this off on purpose. Leave it off.
+#   BROKEN:   this does not work and I have not found out why yet.
+
 settings = {
   core = {
     real_name = "Buster McFadden";
@@ -85,6 +89,7 @@ channels = (
   { name = "##lesbianbondagedungeon"; chatnet = "libera"; autojoin = "yes"; },
 
   { name = "#cyberspace"; chatnet = "Clonquistes"; autojoin = "yes"; }
+  # DISABLED: I join this by hand on the occasions I need it.
   # { name = "#busted"; chatnet = "SRHNet"; autojoin = "yes"; },
 );
 
