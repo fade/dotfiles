@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# The emacs configuration this machine runs.
 parent="{{ .chezmoi.homeDir }}/emacs-config"
 target="$parent/emacs-for-common-lisp"
-repo="git@github.com:fade/emacs-for-common-lisp.git"
-repo_https="https://github.com/fade/emacs-for-common-lisp.git"
+repo="https://github.com/fade/emacs-for-common-lisp.git"
 
 if [ -d "$target/.git" ]; then
     exit 0
@@ -22,8 +22,6 @@ if [ -d "$target" ] && [ -n "$(ls -A "$target" 2>/dev/null || true)" ]; then
     exit 1
 fi
 
-if git ls-remote "$repo" >/dev/null 2>&1; then
-    git clone "$repo" "$target"
-else
-    git clone "$repo_https" "$target"
-fi
+# A public repository, so this needs no credential and works on a host that
+# has none. Never prompt: a host being provisioned has nobody at the keyboard.
+GIT_TERMINAL_PROMPT=0 git clone "$repo" "$target"

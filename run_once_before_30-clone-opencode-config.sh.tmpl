@@ -21,6 +21,8 @@ fi
 
 mkdir -p "$(dirname "$target")"
 
+export GIT_TERMINAL_PROMPT=0
+
 if git ls-remote "$repo" >/dev/null 2>&1; then
     git clone "$repo" "$target"
 else

@@ -19,6 +19,8 @@ if [ -d "$target" ] && [ -n "$(ls -A "$target" 2>/dev/null || true)" ]; then
     exit 1
 fi
 
+export GIT_TERMINAL_PROMPT=0
+
 if git ls-remote "$repo" >/dev/null 2>&1; then
     git clone --recurse-submodules "$repo" "$target"
 else
