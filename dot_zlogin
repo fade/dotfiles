@@ -1,3 +1,6 @@
 # SSH agent and key loading are handled by the per-user zsh overlay, not here.
 
-eval "$(direnv hook zsh)"
+# Not every machine I log in to has direnv: Gentoo does not package it at all.
+# Unguarded, this greets me with an error on every login of a host that lacks
+# it, for a convenience I can perfectly well do without there.
+command -v direnv >/dev/null && eval "$(direnv hook zsh)"

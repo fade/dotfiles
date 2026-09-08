@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Push a versioned snapshot of the working set into the borg repository on
+# ghost. Run it when you like; it is cheap after the first one because borg
+# only stores what changed.
+#
+# Where unison keeps the two machines the same, this keeps the past: it is what
+# you reach for when the answer is "it was fine yesterday".
+set -euo pipefail
+
+repo="${BORG_REPO:-ssh://fade@ghost/~/borg/{{ .chezmoi.hostname }}}"
+conf="{{ .chezmoi.homeDir }}/.config/borg"
+pass="$conf/passphrase"
+
+if [ ! -r "$pass" ]; then
+    echo "dsmr-backup: no passphrase at $pass" >&2
+    echo "  The repository is encrypted and the passphrase is deliberately not" >&2
+    echo "  in the dotfiles, which are public. Put it there, mode 600." >&2
+    exit 1
+fi
+
+export BORG_REPO="$repo"
+export BORG_PASSCOMMAND="cat $pass"
+# A laptop that wandered onto a different network should fail, not hang.
+export BORG_RSH="ssh -o BatchMode=yes -o ConnectTimeout=15"
+
+mapfile -t paths < <(grep -vE '^\s*(#|$)' "$conf/include")
+for p in "${paths[@]}"; do
+    [ -e "$p" ] || { echo "dsmr-backup: skipping absent $p" >&2; continue; }
+done
+
+borg create --stats --compression zstd,3 \
+    --exclude-from "$conf/exclude" \
+    "::{{ .chezmoi.hostname }}-{now:%Y%m%dT%H%M%S}" \
+    "${paths[@]}"
+
+# Keep enough history to answer "what did it look like last week" without the
+# repository growing without bound.
+borg prune --stats --keep-daily 7 --keep-weekly 4 --keep-monthly 6
+borg compact

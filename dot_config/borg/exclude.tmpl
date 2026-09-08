@@ -1,0 +1,31 @@
+# What borg leaves out. The same working set unison carries, minus anything a
+# build, a download or a remote can produce again.
+#
+# Kept deliberately: every .git except the three oversized ones. Unpushed
+# commits live there and nothing else holds them.
+sh:**/*.fasl
+sh:**/*.fas
+sh:**/*.lib
+sh:**/*.pyc
+sh:**/__pycache__
+sh:**/node_modules
+sh:**/.venv
+sh:**/venv
+sh:**/.direnv
+sh:**/installer_files
+sh:**/.terraform
+sh:**/.mypy_cache
+sh:**/.pytest_cache
+sh:**/target
+sh:**/dist
+sh:**/*.ckpt
+sh:**/*.safetensors
+sh:**/*.pth
+sh:**/*.dump
+sh:**/*.sql
+{{ .chezmoi.homeDir }}/SourceCode/lisp/eve-quant/.git
+{{ .chezmoi.homeDir }}/SourceCode/emacs/.git
+{{ .chezmoi.homeDir }}/SourceCode/chrome/.git
+{{ .chezmoi.homeDir }}/.claude/projects
+{{ .chezmoi.homeDir }}/.claude/file-history
+{{ .chezmoi.homeDir }}/.claude/shell-snapshots
