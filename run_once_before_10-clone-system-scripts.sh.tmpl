@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-target="{{ .chezmoi.homeDir }}/system_scripts"
-repo="git@github.com:fade/system_scripts.git"
-repo_https="https://github.com/fade/system_scripts.git"
+# The scripts and ansible tree this machine is built from.
+parent="{{ .chezmoi.homeDir }}"
+target="$parent/system_scripts"
+repo="git@github-system-scripts:fade/system_scripts.git"
 
 if [ -d "$target/.git" ]; then
     exit 0
 fi
+
+mkdir -p "$parent"
 
 if [ -e "$target" ] && [ ! -d "$target" ]; then
     echo "run_once: $target exists and is not a directory; aborting" >&2
@@ -19,10 +22,18 @@ if [ -d "$target" ] && [ -n "$(ls -A "$target" 2>/dev/null || true)" ]; then
     exit 1
 fi
 
+# Never sit at a prompt: nobody is at the keyboard of a machine being set up.
 export GIT_TERMINAL_PROMPT=0
 
-if git ls-remote "$repo" >/dev/null 2>&1; then
-    git clone --recurse-submodules "$repo" "$target"
-else
-    git clone --recurse-submodules "$repo_https" "$target"
+# fade/system_scripts is private, so there is no anonymous url to fall back to. Say
+# which credential is missing rather than failing on a url that could not have
+# worked either way.
+if ! git ls-remote "$repo" >/dev/null 2>&1; then
+    echo "run_once: cannot read fade/system_scripts." >&2
+    echo "  It is private and this host has no key that reads it." >&2
+    echo "  Expected an ssh host alias 'github-system-scripts' in ~/.ssh/config naming a" >&2
+    echo "  deploy key for that repository. Provisioning installs both." >&2
+    exit 1
 fi
+
+git clone --recurse-submodules "$repo" "$target"
