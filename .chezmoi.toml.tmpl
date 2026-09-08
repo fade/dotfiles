@@ -1,6 +1,34 @@
-{{- $saslUser := promptStringOnce . "irssi.saslUsername" "libera SASL username (blank to skip SASL)" "Fade" -}}
-{{- $saslPass := promptStringOnce . "irssi.saslPassword" "libera SASL password (blank to skip SASL)" "" -}}
-{{- $srhKey   := promptStringOnce . "irssi.srhChannelKey" "SRHNet channel key (blank if none)" "" -}}
+{{/*
+   Values already answered win, so re-running init never loses them. Failing
+   that, ask when there is somebody to ask, and take the defaults when there is
+   not: a machine being provisioned has nobody at the keyboard, and a template
+   that can only render at a prompt cannot be applied to one at all.
+
+   The defaults leave both secrets blank, which skips SASL. A host set up
+   unattended has no business holding those credentials.
+*/ -}}
+{{- $irssi := default (dict) (get . "irssi") -}}
+
+{{- $saslUser := "Fade" -}}
+{{- if hasKey $irssi "saslUsername" -}}
+{{-   $saslUser = get $irssi "saslUsername" -}}
+{{- else if stdinIsATTY -}}
+{{-   $saslUser = promptStringOnce . "irssi.saslUsername" "libera SASL username (blank to skip SASL)" "Fade" -}}
+{{- end -}}
+
+{{- $saslPass := "" -}}
+{{- if hasKey $irssi "saslPassword" -}}
+{{-   $saslPass = get $irssi "saslPassword" -}}
+{{- else if stdinIsATTY -}}
+{{-   $saslPass = promptStringOnce . "irssi.saslPassword" "libera SASL password (blank to skip SASL)" "" -}}
+{{- end -}}
+
+{{- $srhKey := "" -}}
+{{- if hasKey $irssi "srhChannelKey" -}}
+{{-   $srhKey = get $irssi "srhChannelKey" -}}
+{{- else if stdinIsATTY -}}
+{{-   $srhKey = promptStringOnce . "irssi.srhChannelKey" "SRHNet channel key (blank if none)" "" -}}
+{{- end -}}
 
 [data.irssi]
     saslUsername = {{ $saslUser | quote }}
