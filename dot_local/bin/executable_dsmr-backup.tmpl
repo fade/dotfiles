@@ -1,13 +1,20 @@
 #!/usr/bin/env bash
-# Push a versioned snapshot of the working set into the borg repository on
-# ghost. Run it when you like; it is cheap after the first one because borg
-# only stores what changed.
+# Take a versioned snapshot of the working set. Run it when you like; it is
+# cheap after the first one because borg only stores what changed.
 #
 # Where unison keeps the two machines the same, this keeps the past: it is what
 # you reach for when the answer is "it was fine yesterday".
 set -euo pipefail
 
+{{ if eq .chezmoi.hostname "ghost" -}}
+# ghost holds the repositories the travelling machines push into, so it has
+# nowhere to push its own. I send them to the other physical disk instead: a
+# snapshot beside the work it came from answers "it was fine yesterday" and
+# nothing else, and losing that disk would take both copies at once.
+repo="${BORG_REPO:-/srv/borg/{{ .chezmoi.hostname }}}"
+{{ else -}}
 repo="${BORG_REPO:-ssh://fade@ghost/~/borg/{{ .chezmoi.hostname }}}"
+{{ end -}}
 conf="{{ .chezmoi.homeDir }}/.config/borg"
 pass="$conf/passphrase"
 
