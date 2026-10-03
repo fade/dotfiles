@@ -42,8 +42,18 @@ ignore = Name installer_files
 ignore = Name .terraform
 ignore = Name .mypy_cache
 ignore = Name .pytest_cache
-ignore = Name target
-ignore = Name dist
+ignore = Name .stack-work
+
+# A directory called dist or target is as often source as build output: valis
+# keeps code in src/dist, and hacl-star tracks over a thousand files in dist.
+# So I name build trees by their own layout or by where they live, never by
+# that bare name. Missing one costs bandwidth; a bare name silently skipped
+# source.
+ignore = Regex SourceCode/.*/target/(debug|release)
+ignore = Path SourceCode/lisp/DeepSkyV2/valis/dist
+ignore = Path SourceCode/neuranet/page-builder/editor-ui/dist
+ignore = Path SourceCode/lisp/clojure/target
+ignore = Path SourceCode/archive.lisp/clojure/target
 
 # Model weights and database dumps: large, and downloadable or regenerable.
 ignore = Name *.ckpt
