@@ -39,6 +39,24 @@ servers = (
     port = "26697";
     use_tls = "yes";
     autoconnect = "yes";
+  },
+  {
+    address = "irc.libera.chat";
+    chatnet = "libera";
+    port = "6667";
+    use_tls = "no";
+    tls_verify = "no";
+    autoconnect = "yes";
+    starttls = "yes";
+  },
+  {
+    address = "irc.whine.com";
+    chatnet = "SRHNet";
+    port = "6667";
+    use_tls = "no";
+    tls_verify = "no";
+    autoconnect = "yes";
+    starttls = "yes";
   }
 );
 
@@ -72,23 +90,45 @@ chatnets = {
 };
 
 channels = (
-  { name = "#deepsky"; chatnet = "SRHNet"; autojoin = "yes";{{ if $srhChannelKey }} password = {{ $srhChannelKey | quote }};{{ end }} },
+  {
+    name = "#deepsky";
+    chatnet = "SRHNet";
+    autojoin = "yes";
+{{- if $srhChannelKey }}
+    password = {{ $srhChannelKey | quote }};
+{{- end }}
+  },
   { name = "#walled"; chatnet = "SRHNet"; autojoin = "yes"; },
   { name = "#archive"; chatnet = "SRHNet"; autojoin = "yes"; },
-  { name = "#funkrehab"; chatnet = "SRHNet"; autojoin = "yes";{{ if $srhChannelKey }} password = {{ $srhChannelKey | quote }};{{ end }} },
+  {
+    name = "#funkrehab";
+    chatnet = "SRHNet";
+    autojoin = "yes";
+{{- if $srhChannelKey }}
+    password = {{ $srhChannelKey | quote }};
+{{- end }}
+  },
   { name = "#trinity"; chatnet = "SRHNet"; autojoin = "yes"; },
   { name = "#srh"; chatnet = "SRHNet"; autojoin = "yes"; },
 
   { name = "#deepsky"; chatnet = "libera"; autojoin = "yes"; },
   { name = "#commonlisp"; chatnet = "libera"; autojoin = "yes"; },
   { name = "#systemcrafters"; chatnet = "libera"; autojoin = "yes"; },
-  { name = "#systemcrafters-live"; chatnet = "libera"; autojoin = "yes"; },
+  {
+    name = "#systemcrafters-live";
+    chatnet = "libera";
+    autojoin = "yes";
+  },
   { name = "#asteroid.music"; chatnet = "libera"; autojoin = "yes"; },
   { name = "#clatter"; chatnet = "libera"; autojoin = "yes"; },
   { name = "#shirakumo"; chatnet = "libera"; autojoin = "yes"; },
-  { name = "##lesbianbondagedungeon"; chatnet = "libera"; autojoin = "yes"; },
+  {
+    name = "##lesbianbondagedungeon";
+    chatnet = "libera";
+    autojoin = "yes";
+  },
 
-  { name = "#cyberspace"; chatnet = "Clonquistes"; autojoin = "yes"; }
+  { name = "#cyberspace"; chatnet = "Clonquistes"; autojoin = "yes"; },
   # DISABLED: I join this by hand on the occasions I need it.
   # { name = "#busted"; chatnet = "SRHNet"; autojoin = "yes"; },
 );
