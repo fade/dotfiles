@@ -121,6 +121,12 @@ ignore = Path .claude/settings.local.json
 ignore = Regex \.claude/projects/[^/]*/[^/]*
 ignorenot = Regex \.claude/projects/[^/]*/memory
 
+# Claude prunes old transcripts on its own schedule and then removes the empty
+# project directory. On this machine that looked like a deletion, and it took
+# the whole directory on ghost, transcripts and all. A project directory now
+# never goes on ghost because it went here; a single memory page still does.
+nodeletionpartial = Regex \.claude/projects/[^/]* -> ssh://fade@ghost/{{ .chezmoi.homeDir }}
+
 # --- behaviour ------------------------------------------------------------
 auto = true
 batch = false
