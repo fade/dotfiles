@@ -55,6 +55,11 @@ ignore = Name dsmr.core
 ignore = Name dsmr.core.*
 ignore = Path SourceCode/lisp/dsmr-mcp/bin
 
+# Compiled Emacs Lisp only loads under the Emacs build that compiled it.
+ignore = Name *.elc
+ignore = Name *.eln
+ignore = Name eln-cache
+
 # A directory called dist or target is as often source as build output: valis
 # keeps code in src/dist, and hacl-star tracks over a thousand files in dist.
 # So I name build trees by their own layout or by where they live, never by
@@ -73,16 +78,41 @@ ignore = Name *.pth
 ignore = Name *.dump
 ignore = Name *.sql
 
-# Three repositories whose packed history runs to gigabytes and lives complete
+# Two repositories whose packed history runs to gigabytes and lives complete
 # on its remote. Their working trees still cross; only the history is skipped.
 ignore = Path SourceCode/lisp/eve-quant/.git
-ignore = Path SourceCode/emacs/.git
 ignore = Path SourceCode/chrome/.git
 
-# Session transcripts and their scratch, which are large, are not configuration,
-# and point at a machine I am not sitting at.
+# The Emacs source tree stays home entirely. It is an upstream checkout that
+# each machine pulls and builds for itself, and its build lands in the tree:
+# objects, dumps, binaries, generated Lisp. Carrying the tree without its
+# history also leaves each machine's git reporting the other's files as edits.
+ignore = Path SourceCode/emacs
+
+# Claude's per-machine state: transcripts, live sessions, the daemon, caches,
+# credentials and local grants. None of it means anything on the other machine,
+# and the memory under .claude/projects still crosses below.
 ignore = Path .claude/file-history
 ignore = Path .claude/shell-snapshots
+ignore = Path .claude/sessions
+ignore = Path .claude/session-env
+ignore = Path .claude/daemon*
+ignore = Path .claude/paste-cache
+ignore = Path .claude/backups
+ignore = Path .claude/.backups
+ignore = Path .claude/cache
+ignore = Path .claude/debug
+ignore = Path .claude/state
+ignore = Path .claude/jobs
+ignore = Path .claude/tasks
+ignore = Path .claude/todos
+ignore = Path .claude/statsig
+ignore = Path .claude/ide
+ignore = Path .claude/history.jsonl
+ignore = Path .claude/stats-cache.json
+ignore = Path .claude/.last-cleanup
+ignore = Path .claude/.credentials.json
+ignore = Path .claude/settings.local.json
 
 # The one thing I want out of .claude/projects is the memory each agent keeps.
 # The transcripts beside it are the bulk and are worthless on the other machine,
