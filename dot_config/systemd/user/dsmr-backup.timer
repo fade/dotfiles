@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily borg snapshot of the working set
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=30min
+# A laptop asleep at midnight takes the missed snapshot when it wakes.
+Persistent=true
+
+[Install]
+WantedBy=timers.target

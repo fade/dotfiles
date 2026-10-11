@@ -35,10 +35,14 @@ for p in "${paths[@]}"; do
     [ -e "$p" ] || { echo "dsmr-backup: skipping absent $p" >&2; continue; }
 done
 
+# A file borg could not read is a warning, and the archive is still made; borg
+# says so with exit status 1. Only a real failure should stop the pruning.
+rc=0
 borg create --stats --compression zstd,3 \
     --exclude-from "$conf/exclude" \
     "::{{ .chezmoi.hostname }}-{now:%Y%m%dT%H%M%S}" \
-    "${paths[@]}"
+    "${paths[@]}" || rc=$?
+[ "$rc" -le 1 ] || exit "$rc"
 
 # Keep enough history to answer "what did it look like last week" without the
 # repository growing without bound.

@@ -8,3 +8,7 @@
 {{ if eq .chezmoi.hostname "ghost" }}
 .unison/ghost.prf
 {{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+.config/systemd
+{{ end }}

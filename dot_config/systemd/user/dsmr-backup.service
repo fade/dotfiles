@@ -1,0 +1,10 @@
+[Unit]
+Description=Versioned snapshot of the working set into borg
+# A machine with no borg passphrase has no repository to write to; skip quietly.
+ConditionPathExists=%h/.config/borg/passphrase
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/dsmr-backup
+Nice=10
+IOSchedulingClass=idle
