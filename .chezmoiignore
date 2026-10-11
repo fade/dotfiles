@@ -3,3 +3,8 @@
 .config/pacmanfile
 .config/pacmanfile/**
 {{ end }}
+
+{{/* ghost is the machine the sync profile points at; on ghost it would sync with itself. */}}
+{{ if eq .chezmoi.hostname "ghost" }}
+.unison/ghost.prf
+{{ end }}
