@@ -89,6 +89,11 @@ ignore = Path SourceCode/chrome/.git
 # history also leaves each machine's git reporting the other's files as edits.
 ignore = Path SourceCode/emacs
 
+# Podman's image and container store belongs to the machine that pulled and
+# built it. Its layers are owned by mapped user ids this side cannot read or
+# recreate, and every image comes back from its registry or its Containerfile.
+ignore = Path .local/share/containers
+
 # Claude's per-machine state: transcripts, live sessions, the daemon, caches,
 # credentials and local grants. None of it means anything on the other machine,
 # and the memory under .claude/projects still crosses below.
