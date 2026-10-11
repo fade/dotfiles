@@ -16,8 +16,6 @@ sh:**/installer_files
 sh:**/.terraform
 sh:**/.mypy_cache
 sh:**/.pytest_cache
-sh:**/target
-sh:**/dist
 sh:**/*.ckpt
 sh:**/*.safetensors
 sh:**/*.pth
@@ -26,6 +24,18 @@ sh:**/*.sql
 {{ .chezmoi.homeDir }}/SourceCode/lisp/eve-quant/.git
 {{ .chezmoi.homeDir }}/SourceCode/emacs/.git
 {{ .chezmoi.homeDir }}/SourceCode/chrome/.git
-{{ .chezmoi.homeDir }}/.claude/projects
 {{ .chezmoi.homeDir }}/.claude/file-history
 {{ .chezmoi.homeDir }}/.claude/shell-snapshots
+
+# A directory called dist or target is as often source as build output:
+# hacl-star tracks over a thousand files in dist, and valis keeps code in
+# src/dist. So build trees are named by their own layout or where they live.
+re:SourceCode/.*/target/(debug|release)(/|$)
+{{ .chezmoi.homeDir }}/SourceCode/lisp/DeepSkyV2/valis/dist
+{{ .chezmoi.homeDir }}/SourceCode/neuranet/page-builder/editor-ui/dist
+{{ .chezmoi.homeDir }}/SourceCode/lisp/clojure/target
+{{ .chezmoi.homeDir }}/SourceCode/archive.lisp/clojure/target
+
+# Of each agent project I keep only its memory; the transcripts beside it are
+# the bulk and are no use to restore.
+re:\.claude/projects/[^/]+/(?!memory(/|$))
