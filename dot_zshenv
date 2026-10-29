@@ -18,6 +18,18 @@
 # spelling the path into each of them by hand is how they drifted apart.
 export LISP_SCRATCHSPACE="$HOME/SourceCode/lisp-scratch/"
 
+# The ssh agent. It is set here rather than in ~/.zshrc because the display
+# manager starts the desktop session through a login zsh, so this is what
+# reaches Emacs and every other program launched from the desktop. An agent
+# that is already live, such as one forwarded over ssh, is kept. Otherwise
+# take the systemd user agent (~/.config/systemd/user/ssh-agent.service).
+# Where neither exists, the variable is left alone and the per-user overlay
+# starts keychain instead.
+if [ ! -S "$SSH_AUTH_SOCK" ] && [ -n "$XDG_RUNTIME_DIR" ] \
+       && [ -S "$XDG_RUNTIME_DIR/ssh-agent.socket" ]; then
+    export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+fi
+
 # Per-user environment overlay, the non-interactive counterpart of the
 # ${USER}.zshrc hook in ~/.zshrc. Drop
 # "$HOME/system_scripts/zshrc.d/${USER}.zshenv" to add your own variables for

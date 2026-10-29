@@ -1,0 +1,15 @@
+[Unit]
+Description=OpenSSH key agent
+Documentation=man:ssh-agent(1)
+# Same name as the units some distributions ship, so this one replaces theirs
+# and a machine never runs two agents. The socket path is the one ~/.zshenv
+# looks for, identical on every distribution.
+
+[Service]
+# A socket left behind by an agent that died makes ssh-agent refuse to bind.
+ExecStartPre=-rm -f %t/ssh-agent.socket
+ExecStart=ssh-agent -D -a %t/ssh-agent.socket
+SuccessExitStatus=2
+
+[Install]
+WantedBy=default.target

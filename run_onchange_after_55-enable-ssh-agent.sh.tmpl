@@ -1,0 +1,10 @@
+#!/bin/sh
+# Start the ssh agent on any machine with a systemd user session. The socket
+# unit some distributions ship listens on the same path, so it is disabled to
+# keep a second listener from racing this one for it.
+# unit hash: {{ include "dot_config/systemd/user/ssh-agent.service" | sha256sum }}
+command -v systemctl >/dev/null 2>&1 || exit 0
+systemctl --user daemon-reload >/dev/null 2>&1 || exit 0
+systemctl --user disable --now ssh-agent.socket >/dev/null 2>&1 || true
+systemctl --user enable --now ssh-agent.service >/dev/null 2>&1 || true
+exit 0
