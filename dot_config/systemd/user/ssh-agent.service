@@ -3,12 +3,18 @@ Description=OpenSSH key agent
 Documentation=man:ssh-agent(1)
 # Same name as the units some distributions ship, so this one replaces theirs
 # and a machine never runs two agents. The socket path is the one ~/.zshenv
-# looks for, identical on every distribution.
+# looks for, identical on every distribution. ssh-agent.socket is masked
+# beside this file: a distribution's socket unit would start this service
+# and hand it a socket it does not use.
 
 [Service]
 # A socket left behind by an agent that died makes ssh-agent refuse to bind.
 ExecStartPre=-rm -f %t/ssh-agent.socket
 ExecStart=ssh-agent -D -a %t/ssh-agent.socket
+# Sessions that take their environment from the user manager get the socket
+# from here; others get it from ~/.zshenv.
+ExecStartPost=-systemctl --user set-environment SSH_AUTH_SOCK=%t/ssh-agent.socket
+ExecStopPost=-systemctl --user unset-environment SSH_AUTH_SOCK
 SuccessExitStatus=2
 
 [Install]

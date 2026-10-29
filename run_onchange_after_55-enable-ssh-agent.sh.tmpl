@@ -1,10 +1,21 @@
 #!/bin/sh
-# Start the ssh agent on any machine with a systemd user session. The socket
-# unit some distributions ship listens on the same path, so it is disabled to
-# keep a second listener from racing this one for it.
+# Switch a running session over to the ssh agent unit. The unit is enabled,
+# and a distribution's ssh-agent.socket masked, by the links chezmoi installs
+# beside it, so a machine with no session running yet picks the agent up at
+# its next login whether or not this script reaches systemd.
 # unit hash: {{ include "dot_config/systemd/user/ssh-agent.service" | sha256sum }}
 command -v systemctl >/dev/null 2>&1 || exit 0
+# Under sudo or su (provisioning runs chezmoi that way) the variables that
+# lead systemctl to the user manager are missing.
+if [ -z "${XDG_RUNTIME_DIR:-}" ] && [ -d "/run/user/$(id -u)" ]; then
+    XDG_RUNTIME_DIR="/run/user/$(id -u)"
+    export XDG_RUNTIME_DIR
+fi
+if [ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ] && [ -S "${XDG_RUNTIME_DIR:-}/bus" ]; then
+    DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+    export DBUS_SESSION_BUS_ADDRESS
+fi
 systemctl --user daemon-reload >/dev/null 2>&1 || exit 0
-systemctl --user disable --now ssh-agent.socket >/dev/null 2>&1 || true
-systemctl --user enable --now ssh-agent.service >/dev/null 2>&1 || true
+systemctl --user stop ssh-agent.socket >/dev/null 2>&1 || true
+systemctl --user restart ssh-agent.service >/dev/null 2>&1 || true
 exit 0
