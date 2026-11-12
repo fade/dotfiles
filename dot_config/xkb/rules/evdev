@@ -1,0 +1,7 @@
+// Adds the fade:* options to the stock evdev rules for libxkbcommon
+// clients (Wayland compositors). Under X, load the symbols directly with
+// xkbcomp -I$HOME/.config/xkb.
+! include %S/evdev
+
+! option              = symbols
+  fade:f13_hyper      = +fade(f13_hyper)

@@ -1,0 +1,11 @@
+// Hyper on F13, on Mod3.
+//
+// The Keychron K10 HE sends F13 from its left Win key. Mapping F13 to
+// Hyper_L makes that key a modifier of its own, where the keyboard's
+// built-in Hyper sends Control, Shift, Alt and Super together.
+partial modifier_keys
+xkb_symbols "f13_hyper" {
+    include "hyper(mod3)"
+    key <FK13> { [ Hyper_L ] };
+    modifier_map Mod3 { <FK13> };
+};
