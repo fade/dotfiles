@@ -24,6 +24,10 @@
  ;; which keeps extracted builds and test fixtures with their own .asd
  ;; files. None of it is source a build should load.
  (:also-exclude ".planning")
+{{- if stat "/mnt/host-SourceCode/lisp" }}
+ ;; A VM guest reads its host's Lisp tree over a share.
+ (:tree "/mnt/host-SourceCode/lisp/")
+{{- end }}
  (:tree (:home "SourceCode/lisp"))
  (:tree (:home ".stumpwm.d/modules"))
  (:tree "/usr/share/common-lisp/source/")
