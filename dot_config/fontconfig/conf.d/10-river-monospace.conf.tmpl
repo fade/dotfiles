@@ -1,0 +1,16 @@
+{{- if stat "/usr/local/bin/start-river" -}}
+<?xml version="1.0"?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+  <!-- Monospace on a river host: the font kitty uses on the workstation.
+       Written only where the river session launcher is installed, so an
+       X workstation keeps its own monospace resolution. -->
+  <alias binding="strong">
+    <family>monospace</family>
+    <prefer>
+      <family>EnvyCodeR Nerd Font</family>
+      <family>DroidSansM Nerd Font</family>
+    </prefer>
+  </alias>
+</fontconfig>
+{{ end -}}
