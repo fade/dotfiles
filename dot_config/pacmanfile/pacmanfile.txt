@@ -448,6 +448,7 @@ usbutils
 ventoy-bin
 vim
 virt-manager
+virt-viewer
 vivaldi
 vlc
 vlc-plugins-all
