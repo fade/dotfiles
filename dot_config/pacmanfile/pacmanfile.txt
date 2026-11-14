@@ -123,6 +123,7 @@ google-chrome
 gparted
 gpg-tui
 graphviz
+grim
 grub
 grub-btrfs-support
 grub-hook
@@ -335,6 +336,7 @@ sddm-kcm
 sg3_utils
 shellcheck
 slirp4netns
+slurp
 smartmontools
 s-nail
 snapper
@@ -349,6 +351,7 @@ strawberry
 streamlink
 sudo
 swaks
+swayidle
 swi-prolog
 swtpm
 sysfsutils
@@ -458,6 +461,7 @@ which
 whois
 wireless-regdb
 wireplumber
+wl-clipboard
 wmctrl
 wpa_supplicant
 wttr-cli
