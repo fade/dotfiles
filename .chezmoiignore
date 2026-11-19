@@ -12,3 +12,7 @@
 {{ if ne .chezmoi.os "linux" }}
 .config/systemd
 {{ end }}
+
+{{/* Tests for the scripts here; run from the source directory, never installed. */}}
+tests
+tests/**

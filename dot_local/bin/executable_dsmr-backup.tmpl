@@ -22,7 +22,12 @@ pass="$conf/passphrase"
 # every run: state is ok or failed; rc is the exit status; time is UTC; step
 # names the stage that ran last; message is that stage's last error line.
 # A borg warning (rc 1) still reads ok, since every run on a host with
-# unreadable container files ends that way.
+# unreadable container files ends that way. A run stopped by a signal reads
+# failed, with rc 128+N.
+#
+# A run killed outright (SIGKILL, the OOM killer) or never started leaves the
+# previous status in place, so a reader must judge the age of time= as well
+# as state=.
 status_dir="${XDG_STATE_HOME:-{{ .chezmoi.homeDir }}/.local/state}/dsmr-backup"
 step=setup
 message=
@@ -47,12 +52,23 @@ write_status() {
 }
 trap write_status EXIT
 
-# Run one borg stage, keeping its stderr for the status file and the journal.
+# Without these, a signal ends the script with $? still 0 and the run reads ok.
+on_signal() {
+    message="stopped by SIG$1 during $step"
+    exit $((128 + $2))
+}
+trap 'on_signal TERM 15' TERM
+trap 'on_signal INT 2' INT
+trap 'on_signal HUP 1' HUP
+
+# Run one borg stage. Its stderr reaches the journal as it is written, and a
+# copy is kept for the status file.
 run_step() {
     step=$1; shift
     local rc=0
-    "$@" 2> "$errlog" || rc=$?
-    cat "$errlog" >&2
+    "$@" 2> >(tee "$errlog" >&2) || rc=$?
+    # The copy is complete only once tee has exited.
+    wait $! 2>/dev/null || true
     return "$rc"
 }
 
