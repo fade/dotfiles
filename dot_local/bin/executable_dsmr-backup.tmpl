@@ -18,7 +18,62 @@ repo="${BORG_REPO:-ssh://fade@ghost/~/borg/{{ .chezmoi.hostname }}}"
 conf="{{ .chezmoi.homeDir }}/.config/borg"
 pass="$conf/passphrase"
 
+# Outcome of the last run, for a status bar. Key=value lines, replaced whole on
+# every run: state is ok or failed; rc is the exit status; time is UTC; step
+# names the stage that ran last; message is that stage's last error line.
+# A borg warning (rc 1) still reads ok, since every run on a host with
+# unreadable container files ends that way. A run stopped by a signal reads
+# failed, with rc 128+N.
+#
+# A run killed outright (SIGKILL, the OOM killer) or never started leaves the
+# previous status in place, so a reader must judge the age of time= as well
+# as state=.
+status_dir="${XDG_STATE_HOME:-{{ .chezmoi.homeDir }}/.local/state}/dsmr-backup"
+step=setup
+message=
+errlog=$(mktemp)
+write_status() {
+    local rc=$? state=ok
+    [ -z "${borg_rc:-}" ] || rc=$borg_rc
+    [ "$rc" -le 1 ] || state=failed
+    [ "$step" != setup ] || [ "$rc" -eq 0 ] || state=failed
+    mkdir -p "$status_dir"
+    [ -n "$message" ] || message=$(grep -v '^\s*$' "$errlog" | tail -n 1 || true)
+    {
+        echo "state=$state"
+        echo "rc=$rc"
+        echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+        echo "host={{ .chezmoi.hostname }}"
+        echo "step=$step"
+        echo "message=${message//$'\n'/ }"
+    } > "$status_dir/status.tmp"
+    mv -f "$status_dir/status.tmp" "$status_dir/status"
+    rm -f "$errlog"
+}
+trap write_status EXIT
+
+# Without these, a signal ends the script with $? still 0 and the run reads ok.
+on_signal() {
+    message="stopped by SIG$1 during $step"
+    exit $((128 + $2))
+}
+trap 'on_signal TERM 15' TERM
+trap 'on_signal INT 2' INT
+trap 'on_signal HUP 1' HUP
+
+# Run one borg stage. Its stderr reaches the journal as it is written, and a
+# copy is kept for the status file.
+run_step() {
+    step=$1; shift
+    local rc=0
+    "$@" 2> >(tee "$errlog" >&2) || rc=$?
+    # The copy is complete only once tee has exited.
+    wait $! 2>/dev/null || true
+    return "$rc"
+}
+
 if [ ! -r "$pass" ]; then
+    message="no passphrase at $pass"
     echo "dsmr-backup: no passphrase at $pass" >&2
     echo "  The repository is encrypted and the passphrase is deliberately not" >&2
     echo "  in the dotfiles, which are public. Put it there, mode 600." >&2
@@ -38,7 +93,7 @@ done
 # A file borg could not read is a warning, and the archive is still made; borg
 # says so with exit status 1. Only a real failure should stop the pruning.
 rc=0
-borg create --stats --compression zstd,3 \
+run_step create borg create --stats --compression zstd,3 \
     --exclude-from "$conf/exclude" \
     "::{{ .chezmoi.hostname }}-{now:%Y%m%dT%H%M%S}" \
     "${paths[@]}" || rc=$?
@@ -46,5 +101,8 @@ borg create --stats --compression zstd,3 \
 
 # Keep enough history to answer "what did it look like last week" without the
 # repository growing without bound.
-borg prune --stats --keep-daily 7 --keep-weekly 4 --keep-monthly 6
-borg compact
+run_step prune borg prune --stats --keep-daily 7 --keep-weekly 4 --keep-monthly 6
+run_step compact borg compact
+message=
+: > "$errlog"
+borg_rc=$rc
