@@ -1,0 +1,9 @@
+# Environment for the rhizome (river) session.
+#
+# ~/.local/bin/rhizome-session sources this file, when readable, before it
+# starts river, so these variables reach river and every client it launches.
+# Changes take effect at the next login.
+
+# Map the Keychron's F13 key to Hyper. The fade:f13_hyper option is defined in
+# ~/.config/xkb/symbols/fade, which libxkbcommon finds under $XDG_CONFIG_HOME/xkb.
+export XKB_DEFAULT_OPTIONS="fade:f13_hyper"
