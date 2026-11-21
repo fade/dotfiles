@@ -24,6 +24,9 @@
  ;; which keeps extracted builds and test fixtures with their own .asd
  ;; files. None of it is source a build should load.
  (:also-exclude ".planning")
+ ;; qlot installs a project's pinned dependencies under its .qlot
+ ;; directory. Like .bundle-libs, those copies serve that project alone.
+ (:also-exclude ".qlot")
 {{- if stat "/mnt/host-SourceCode/lisp" }}
  ;; A VM guest reads its host's Lisp tree over a share.
  (:tree "/mnt/host-SourceCode/lisp/")
